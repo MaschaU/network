@@ -1,3 +1,6 @@
+// webpack is an entry point for the app 
+// webpack-dev-server doesn't write any output files after compiling. 
+// Instead, it keeps bundle files in memory and serves them as if they were real files mounted at the server's root path.
 const webpack = require('webpack');
 
 const conf = {

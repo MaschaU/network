@@ -1,3 +1,5 @@
+// bundle- server compiles our js code and serves it
+// it's only neccessarry to start the bundle-server once
 const express = require('express');
 const app = express();
 
