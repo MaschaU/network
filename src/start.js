@@ -1,19 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Welcome from './welcome.js';
 
-// gives us access to DOM
-ReactDOM.render(
-    <HelloWorld />,
-    document.querySelector('main')
-);
-
-// react component- it puts an element on the screen via JSX syntax
-function HelloWorld() {
-    return (
-        <div>Hello, World!</div>
-    );
+let elem;
+if (location.pathname === '/welcome') {
+    elem = <Welcome />;
+} else {
+    elem = <img src="./logo.png" />;
 }
 
-
-
-
+ReactDOM.render(elem, document.querySelector('main'));
