@@ -17,3 +17,11 @@ module.exports.insertNewUser = function (first, last, email, hashPass) {
         [first, last, email, hashPass]
     );
 };
+
+module.exports.getHashedPassword = function (email) {
+    return db.query(
+        `
+        SELECT * FROM users WHERE email = $1
+        `, [email]
+    );
+};

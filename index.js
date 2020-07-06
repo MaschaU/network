@@ -5,6 +5,8 @@ const compression = require("compression");
 const cookieSession = require("cookie-session");
 const db = require("./sql/db.js");
 const {hash, compare} = require("./bc.js");
+const csurf = require("csurf");
+const {getHashedPassword} = require("./sql/db.js");
 
 // Returns the compression middleware using the given options. 
 // The middleware will attempt to compress response bodies for all request that traverse through the middleware, 
@@ -33,6 +35,11 @@ app.use(cookieSession({
     secret: `I'm always angry`,
     maxAge: 1000 * 60 * 60 * 24 * 14,
 }));
+app.use(csurf());
+app.use(function(req, res, next) {
+    res.cookie("mytoken", req.csrfToken());
+    next();
+});
 
 
 // GET ROUTES
@@ -81,6 +88,30 @@ app.post("/registeredUser", (req, res) => {
             console.log("Error in POST:", error);
             res.send(error);
         });
+});
+
+app.post("/login", (req, res)=>{
+    let password = req.body.password;
+    let email = req.body.email;
+    getHashedPassword(email).then((result)=>{
+        if((result.rows != undefined) && (result.rows.length>0)) {
+            compare(password, result.rows[0].password_hash).then((match)=>{
+                if(match) {
+                    let userId= result.rows[0].id;
+                    req.session.userId = userId;
+                    res.json("Success");
+                } else {
+                    res.json("Failure");
+                }
+            }).catch((error)=>{
+                console.log("The inner error:", error);
+                res.json("Failure");
+            }).catch(error=>{
+                console.log("Last error in login post:", error);
+            });
+        }
+    });
+
 });
 
 

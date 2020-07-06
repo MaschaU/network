@@ -1,5 +1,6 @@
 import React from "react";
-import axios from "axios";
+import axios from "./axios";
+import {Link} from "react-router-dom";
 
 export default class Registration extends React.Component {
     constructor(props) {
@@ -47,6 +48,7 @@ export default class Registration extends React.Component {
     render() {
         return (
             <div>
+                <img src="./logo.png"></img>
                 <form className="registration-form" onSubmit={this.handleSubmit}>
                     <input type="text" name="firstName" onChange={this.handleChange} placeholder="First Name" />
                     <input type="text" name="lastName" onChange={this.handleChange} placeholder="Last Name" />
@@ -55,8 +57,8 @@ export default class Registration extends React.Component {
                     <input type="text" name="repeatedPassword" onChange={this.handleChange} placeholder="Re-type Password" />
                     <button>Sign Up!</button>
                 </form>
-                <span>{this.state.error}</span>
-                <a href="#">Already a user? Sign in</a>
+                <label>{this.state.error}</label>
+                <Link to="/login">Already a member? Log in!</Link>
             </div>
         );
     }
