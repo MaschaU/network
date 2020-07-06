@@ -25,3 +25,9 @@ module.exports.getHashedPassword = function (email) {
         `, [email]
     );
 };
+
+/*DATABASE QUERIES FOR PART 3
+SELECT to find user by email (reuse query from Login)
+INSERT into the new table for secret codes
+SELECT that finds code in the new table that matches the email address AND is less than 10 minutes old
+UPDATE password of user's table by email address*/

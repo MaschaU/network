@@ -41,10 +41,8 @@ app.use(function(req, res, next) {
     next();
 });
 
-
+// ROUTES //
 // GET ROUTES
-
-
 app.get('/welcome', (req, res) => {
     if (req.session.userId) {
         res.redirect('/');
@@ -52,8 +50,6 @@ app.get('/welcome', (req, res) => {
         res.sendFile(__dirname + '/index.html');
     }
 });
-
-
 
 // all the other routes need to be above *
 // no matter what the url, the * will be served
@@ -114,8 +110,44 @@ app.post("/login", (req, res)=>{
 
 });
 
+// EXPRESS ROUTES FOR RESETTING THE PASSWORDS
+
+// POST /password/reset/start- happens when user first enters their email in the 1st display //
+// 1.) verify the users email address 
+// - if the user is register, generate the secret code via cryptoRandomString
+//   const cryptoRandomString = require('crypto-random-string');
+//   const secretCode = cryptoRandomString({
+//       length: 6
+//   });
+// - once we generate the secret code, we need to record it for later verification
+// - we do that by creating a new table and storing the secret code in it
+// - then we send an email to the user
+// - then sending a response to the user (everything worked) and rendering the next display
 
 
+// POST /password/reset/verify- happens when user enters the code and new password
+// - it runs once user enteres the code received in email
+// - verify that the code is a correct one
+// - comapare received code with the one from our data base
+// - if the codes match, the user has entered the correct code in which case we need to handle the password
+// - to do that we need to hash password and update the table with the new hash and send the response to user saying it was successful
+
+// how to have one component render different displays?
+// class ResetPassword extends React.Component {
+//    constructor(){
+//      super();
+//     this.state = {};
+// }
+// getCurrentDisplay(){
+//     if(something){
+//          return display1/display2/display3
+// }    
+// - we want to put something in state that indicates which display we want to show
+// - we'll have to update this property of state when we want to show the next display
+// - where in our code do we want to put the logic of updating the property of state?
+// - axios.then will run after we receive the response from the server! hint!
+// 
+//
 
 
 
