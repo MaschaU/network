@@ -26,6 +26,23 @@ module.exports.getHashedPassword = function (email) {
     );
 };
 
+module.exports.getUsersEmail = function(email) {
+    return db.query(
+        `
+        SELECT * FROM users WHERE email=$1
+        `, [email]
+    );
+};
+
+module.exports.insertIntoPasswordResetCodes = function(email, code) {
+    return db.query(
+        `
+        INSERT INTO password_reset_codes (email, code)
+        VALUES ($1, $2) RETURNING id
+        `, [email, code]
+    );
+};
+
 //module.exports.insertCode = function ()
 
 /*DATABASE QUERIES FOR PART 3

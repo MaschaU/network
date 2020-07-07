@@ -43,7 +43,7 @@ export default class Login extends React.Component {
                 </form>
                 <label>{this.state.error}</label>
                 <Link to="/">Registration</Link>
-                <Link to="/resetPassword">Reset your password</Link>
+                <Link to="/resetpassword">Reset your password</Link>
             </div>
         );
     }

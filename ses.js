@@ -46,13 +46,5 @@ exports.sendEmail = function(to, subject, message) {
     );
 };
 
-// sendEmail('dill@spicedling.email', "Heres your password reset code", '918273ysdhbvj')
-//     .then(() => {
-
-//     })
-//     .catch(err => {
-//         console.log(err)
-//     })
-
 
 

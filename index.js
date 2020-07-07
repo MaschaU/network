@@ -1,12 +1,14 @@
 const express = require("express");
 const app = express();
 const compression = require("compression");
-// const  {Redirect} = require("react-router");
+const  {Redirect} = require("react-router");
 const cookieSession = require("cookie-session");
 const db = require("./sql/db.js");
 const {hash, compare} = require("./bc.js");
 const csurf = require("csurf");
-const {getHashedPassword} = require("./sql/db.js");
+const {getHashedPassword, getUsersEmail, insertIntoPasswordResetCodes} = require("./sql/db.js");
+const cryptoRandomString = require('crypto-random-string');
+const { sendEmail } = require("./ses.js");
 
 // Returns the compression middleware using the given options. 
 // The middleware will attempt to compress response bodies for all request that traverse through the middleware, 
@@ -17,7 +19,7 @@ app.use(compression());
 if (process.env.NODE_ENV != "production") {
     app.use(
         "/bundle.js",
-        // whenever there is request for bundle.js, get it from 8081
+        // whenever there is request for bundle.js, we will get it from 8081
         require("http-proxy-middleware")({
             target: "http://localhost:8081/"
         })
@@ -42,14 +44,18 @@ app.use(function(req, res, next) {
 });
 
 // ROUTES //
-// GET ROUTES
-app.get('/welcome', (req, res) => {
+// there is a matching server request for every axios request
+
+// GET //
+app.get("/welcome", (req, res) => {
     if (req.session.userId) {
         res.redirect('/');
     } else {
         res.sendFile(__dirname + '/index.html');
     }
 });
+
+
 
 // all the other routes need to be above *
 // no matter what the url, the * will be served
@@ -78,7 +84,7 @@ app.post("/registeredUser", (req, res) => {
             console.log(results.rows);
             const userId = results.rows[0].id;
             req.session.userId = userId;
-            res.json("Successful!");
+            res.json("Success");
         })
         .catch((error) => {
             console.log("Error in POST:", error);
@@ -109,6 +115,36 @@ app.post("/login", (req, res)=>{
     });
 
 });
+
+app.post("/resetpassword/email", (req, res)=>{
+    let email = req.body.email;
+    let code = req.body.code;
+    
+    getUsersEmail(email).then(result=>{
+        if(result.rows.length>0){
+            console.log("The result rows is:", result.rows);
+            const secretCode = cryptoRandomString({
+                length: 6
+            });
+            console.log("The secret code is:", secretCode);
+            insertIntoPasswordResetCodes(email, code).then(sendEmail(email, "Heres your password reset code", secretCode)
+                .then(() => {
+                    console.log("Empty JSON is:");
+                    res.json({});
+       
+                })
+                .catch(error => {
+                    console.log("Error in response:", error);
+                }));
+        }
+    });
+});
+
+/*app.post("/resetpassword/verify", (req, res)=>{
+
+});*/
+
+
 
 // EXPRESS ROUTES FOR RESETTING THE PASSWORDS
 

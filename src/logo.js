@@ -4,16 +4,10 @@ import Registration from "./registration";
 import Login from "./login";
 import { HashRouter, Route } from "react-router-dom";
 
-export default function Welcome(props) {
+export default function Logo() {
     return (
-        <div className="welcome">
+        <div>
             <img src="./logo.png" />
-            <HashRouter>
-                <div>
-                    <Route exact path="/" component={Registration} />
-                    <Route path="/login" component={Login} />
-                </div>
-            </HashRouter>
         </div>
     );
 }
