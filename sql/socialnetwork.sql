@@ -17,5 +17,3 @@ CREATE TABLE reset_codes(
   code VARCHAR NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
-SELECT * FROM users WHERE CURRENT_TIMESTAMP - created_at < INTERVAL "10 minutes";

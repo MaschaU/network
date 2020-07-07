@@ -26,6 +26,8 @@ module.exports.getHashedPassword = function (email) {
     );
 };
 
+//module.exports.insertCode = function ()
+
 /*DATABASE QUERIES FOR PART 3
 SELECT to find user by email (reuse query from Login)
 INSERT into the new table for secret codes
