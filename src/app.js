@@ -4,10 +4,11 @@
 // every component we want a user to see must be renderd through App
 // we will get all the info about the user from the App component (via props)
 
-import React from "react";
+/*import React from "react";
 import axios from "./axios";
 import ProfilePic from "./profilepic";
 import Uploader from "./uploader";
+import Profile from "./profile";
 
 export default class App extends React.Component {
     constructor() {
@@ -22,7 +23,7 @@ export default class App extends React.Component {
     componentDidMount() { // runs automatically once the component loads
         // console.log("my component has mounted!");
         axios.get("/user").then(response=>{
-            // nmake axios requestr to servet and get info aboput the user(firstName, lastName, profile pic)
+            // nmake axios request to server and get info aboput the user(firstName, lastName, profile pic)
             // store the response from the server in state
             // get to a point where you can log in this.state and see the users first, last name and profile pic
             // modify users table to include new column- profile pic
@@ -55,6 +56,11 @@ export default class App extends React.Component {
         return(
             <div>
                 <h1>App</h1>
+                <Profile 
+                    first={this.state.first}
+                    last={this.state.last}
+                    imageUrl={this.state.imageUrl}
+                />
                 <ProfilePic 
                     first={this.state.firstName} 
                     last={this.state.lastName}   
@@ -68,4 +74,5 @@ export default class App extends React.Component {
     }
 }
 
-// if uploaderIsVisible is true &&- render Uploader
+// if uploaderIsVisible is true &&- render Uploader*/
+// once we render profile, we can delete Profilepic because we're going to render it from inside of the Profile

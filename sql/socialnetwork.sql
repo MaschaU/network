@@ -11,9 +11,9 @@ CREATE TABLE users (
 
 DROP TABLE IF EXISTS password_reset_codes;
 
-CREATE TABLE reset_codes(
+CREATE TABLE password_reset_codes(
   id SERIAL PRIMARY KEY,
   email VARCHAR NOT NULL,
-  code VARCHAR NOT NULL,
+  code VARCHAR NOT NULL CONSTRAINT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

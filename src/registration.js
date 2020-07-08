@@ -22,7 +22,7 @@ export default class Registration extends React.Component {
         this.setState({
             [e.target.name]: e.target.value
         });
-        console.log(this.state[e.target.name]);
+        // console.log(this.state[e.target.name]);
 
     }
 
@@ -34,8 +34,8 @@ export default class Registration extends React.Component {
         } else {
             const data = this.state;
             axios.post("/registeredUser", data).then(response => {
-                console.log("This is the response:",response);
-                location.replace("/");
+                // console.log("This is the response:",response);
+                location.replace("/welcome#/login");
             }).catch(err => {
                 this.setState({
                     error: err

@@ -20,8 +20,8 @@ export default class Login extends React.Component {
     }
     handleSubmit(e) {
         const data = this.state;
-        axios.post("/login", data).then(response=>{
-            console.log("The response is:", response);
+        axios.post("/userLogin", data).then(response=>{
+            // console.log("The response is:", response);
             location.replace("/");
         }).catch(error=>{
             this.setState({
@@ -42,7 +42,6 @@ export default class Login extends React.Component {
                     <button>Login</button>
                 </form>
                 <label>{this.state.error}</label>
-                <Link to="/">Registration</Link>
                 <Link to="/resetpassword">Reset your password</Link>
             </div>
         );

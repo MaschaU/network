@@ -43,7 +43,7 @@ module.exports.insertIntoPasswordResetCodes = function(email, code) {
     );
 };
 
-//module.exports.insertCode = function ()
+
 
 /*DATABASE QUERIES FOR PART 3
 SELECT to find user by email (reuse query from Login)

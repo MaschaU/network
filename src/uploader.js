@@ -1,4 +1,4 @@
-import React from "react";
+/*import React from "react";
 import axios from "./axios";
 
 export default class Uploader extends React.Component {
@@ -25,4 +25,4 @@ export default class Uploader extends React.Component {
     }
 }
 
-// the server side of the uploader is the same as in the imageboard, incl. multer and s3
+// the server side of the uploader is the same as in the imageboard, incl. multer and s3*/

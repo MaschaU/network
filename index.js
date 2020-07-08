@@ -61,11 +61,11 @@ app.get("/welcome", (req, res) => {
 // no matter what the url, the * will be served
 app.get("*", function(req, res) {
     if (!req.session.userId) {
-        console.log("Redirecting to Welcome");
+        // console.log("Redirecting to Welcome");
         res.redirect("/welcome");
     }
     else {
-        console.log(req.session.userId);
+        // console.log(req.session.userId);
         res.sendFile(__dirname + "/index.html");
     }
 });
@@ -73,26 +73,30 @@ app.get("*", function(req, res) {
 // POST ROUTES
 
 app.post("/registeredUser", (req, res) => {
-    console.log(hash);
+    // console.log(hash);
     hash(req.body.password)
         .then((hashedPw) => {
-            console.log("Hashed password:", hashedPw);
+            // console.log("Hashed password:", hashedPw);
             const { firstName, lastName, email, password } = req.body;
             return db.insertNewUser(firstName, lastName, email, hashedPw);
         })
         .then((results) => {
-            console.log(results.rows);
+            // console.log("I'm executing!:", results.rows);
             const userId = results.rows[0].id;
             req.session.userId = userId;
-            res.json("Success");
+            // console.log("I'm about to come to last two lines");
+            // console.log("I'm after the 1st line");
+            res.json({result:"Success"});
+            // console.log("I made it");
+            
         })
         .catch((error) => {
-            console.log("Error in POST:", error);
+            // console.log("Error in POST:", error);
             res.send(error);
         });
 });
 
-app.post("/login", (req, res)=>{
+app.post("/userLogin", (req, res)=>{
     let password = req.body.password;
     let email = req.body.email;
     getHashedPassword(email).then((result)=>{
@@ -118,19 +122,18 @@ app.post("/login", (req, res)=>{
 
 app.post("/resetpassword/email", (req, res)=>{
     let email = req.body.email;
-    let code = req.body.code;
-    
     getUsersEmail(email).then(result=>{
+        console.log("Rows before the if statement:", result.rows);
         if(result.rows.length>0){
             console.log("The result rows is:", result.rows);
             const secretCode = cryptoRandomString({
                 length: 6
             });
             console.log("The secret code is:", secretCode);
-            insertIntoPasswordResetCodes(email, code).then(sendEmail(email, "Heres your password reset code", secretCode)
+            insertIntoPasswordResetCodes(email, secretCode).then(sendEmail(email, "Heres your password reset code", secretCode)
                 .then(() => {
                     console.log("Empty JSON is:");
-                    res.json({});
+                    res.json("Success");
        
                 })
                 .catch(error => {

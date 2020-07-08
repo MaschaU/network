@@ -15,6 +15,7 @@ export default class Resetpassword extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmitEmail = this.handleSubmitEmail.bind(this);
         this.getStageHtml = this.getStageHtml.bind(this);
+        // console.log("This is this:", this);
     }
     handleChange(e) {
         this.setState({
@@ -27,7 +28,8 @@ export default class Resetpassword extends React.Component {
         const { email } = this.state;
         console.log("This is the email:", email);
         axios.post("/resetpassword/email", { email }).then(response => {
-            console.log("This is the response:", response);
+            // console.log("This is the response:", response);
+            console.log("Is the response.data true?", response.data);
             if (response.data) {
                 this.setState({
                     stage: 1
@@ -41,20 +43,23 @@ export default class Resetpassword extends React.Component {
                     email: ""
                 });
             }
+        }).catch(error=>{
+            console.log("Error in axios POST req password:", error);
         });
     }
 
     getStageHtml() {
         // console.log(this.state.stage);
+        console.log("This is second this:", this);
         if (this.state.stage == 0) {
             return(
                 <div>
                     <p>Enter your email</p>
                     <input type="text" name="email" onChange={this.handleChange} placeholder="Email" />
-                    <button>Submit!</button>
+                    <button onClick={this.handleSubmitEmail}>Submit!</button>
                 </div>
             );
-        } else if (this.stage.state == 1) {
+        } else if (this.state.stage == 1) {
             return(
                 <div>
                     <p>The email should be in your inbox.</p>

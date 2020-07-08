@@ -1,4 +1,4 @@
-import React from "react";
+/*import React from "react";
 
 // since it's only rendering an image, we are making it a function component
 
@@ -19,4 +19,4 @@ export default function ProfilePic(props) {
 }
 // left side- name of the variable we're passing to profilePic
 // right side- a variable that evaluates to something (a variable that we can put into console.log)
-// because axios is async, we are going to see two console.logs. The first one is going to be undefined
+// because axios is async, we are going to see two console.logs. The first one is going to be undefined*/
