@@ -6,7 +6,7 @@ const cookieSession = require("cookie-session");
 const db = require("./sql/db.js");
 const {hash, compare} = require("./bc.js");
 const csurf = require("csurf");
-const {getHashedPassword, getUsersEmail, insertIntoPasswordResetCodes} = require("./sql/db.js");
+const {getHashedPassword, getUsersEmail, insertIntoPasswordResetCodes, checkIfTheCodeIsValid, updateUsersPassword} = require("./sql/db.js");
 const cryptoRandomString = require('crypto-random-string');
 const { sendEmail } = require("./ses.js");
 
@@ -121,15 +121,19 @@ app.post("/userLogin", (req, res)=>{
 });
 
 app.post("/resetpassword/email", (req, res)=>{
+    // verify the users email address and then
     let email = req.body.email;
     getUsersEmail(email).then(result=>{
         console.log("Rows before the if statement:", result.rows);
         if(result.rows.length>0){
-            console.log("The result rows is:", result.rows);
+            // console.log("The result rows is:", result.rows);
+            // generate the secret code
             const secretCode = cryptoRandomString({
                 length: 6
             });
-            console.log("The secret code is:", secretCode);
+            // console.log("The secret code is:", secretCode);
+            // record the secret code for later verification and store it in a new database
+            // send an email to the user
             insertIntoPasswordResetCodes(email, secretCode).then(sendEmail(email, "Heres your password reset code", secretCode)
                 .then(() => {
                     console.log("Empty JSON is:");
@@ -143,57 +147,30 @@ app.post("/resetpassword/email", (req, res)=>{
     });
 });
 
-/*app.post("/resetpassword/verify", (req, res)=>{
-
-});*/
-
-
-
-// EXPRESS ROUTES FOR RESETTING THE PASSWORDS
-
-// POST /password/reset/start- happens when user first enters their email in the 1st display //
-// 1.) verify the users email address 
-// - if the user is register, generate the secret code via cryptoRandomString
-//   const cryptoRandomString = require('crypto-random-string');
-//   const secretCode = cryptoRandomString({
-//       length: 6
-//   });
-// - once we generate the secret code, we need to record it for later verification
-// - we do that by creating a new table and storing the secret code in it
-// - then we send an email to the user
-// - then sending a response to the user (everything worked) and rendering the next display
-
-
-// POST /password/reset/verify- happens when user enters the code and new password
-// - it runs once user enteres the code received in email
-// - verify that the code is a correct one
-// - comapare received code with the one from our data base
-// - if the codes match, the user has entered the correct code in which case we need to handle the password
-// - to do that we need to hash password and update the table with the new hash and send the response to user saying it was successful
-
-// how to have one component render different displays?
-// class ResetPassword extends React.Component {
-//    constructor(){
-//      super();
-//     this.state = {};
-// }
-// getCurrentDisplay(){
-//     if(something){
-//          return display1/display2/display3
-// }    
-// - we want to put something in state that indicates which display we want to show
-// - we'll have to update this property of state when we want to show the next display
-// - where in our code do we want to put the logic of updating the property of state?
-// - axios.then will run after we receive the response from the server! hint!
-// 
-//
-
-
-
-
-
-
-
+// it will run once the user enters the code received
+app.post("/resetpassword/verify", (req, res)=>{
+    let code = req.body.code;
+    let email = req.body.email;
+    let password = req.body.password;
+    // verify if the entered code is the correct one
+    // if the codes match, handle the password
+    checkIfTheCodeIsValid(email, code).then(result=>{
+        if(result.rows[0]) {
+            // hash the password and update the table
+            hash(password).then((hashedPw)=>{
+                return updateUsersPassword(email, hashedPw);
+            }).then((result)=>{
+                res.json("Success");
+            }).catch((error)=>{
+                res.json("Failure");
+            });
+        } else {
+            res.json("Failure");
+        }
+    }).catch((error)=>{
+        res.json("Failure");
+    });
+});
 
 
 

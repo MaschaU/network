@@ -43,7 +43,21 @@ module.exports.insertIntoPasswordResetCodes = function(email, code) {
     );
 };
 
+module.exports.checkIfTheCodeIsValid = function (email, code) {
+    return db.query(
+        `
+        SELECT * FROM password_reset_codes WHERE email=$1 AND code=$2 AND created_at > CURRENT_TIMESTAMP - INTERVAL '10 MINUTES'
+        `, [email, code]
+    );
+};
 
+module.exports.updateUsersPassword = function (email, password) {
+    return db.query(
+        `
+        UPDATE users SET password=$2 WHERE email=$1 RETURNING *
+        `, [email, password]
+    );
+};
 
 /*DATABASE QUERIES FOR PART 3
 SELECT to find user by email (reuse query from Login)

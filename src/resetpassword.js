@@ -32,6 +32,7 @@ export default class Resetpassword extends React.Component {
             // console.log("This is the response:", response);
             console.log("Is the response.data true?", response.data);
             if (response.data) {
+                // console.log("I'm inside the if!");
                 this.setState({
                     stage: 1
                 });
@@ -49,10 +50,41 @@ export default class Resetpassword extends React.Component {
         });
     }
 
-    /*handleSubmitCode(e) {
+    handleSubmitCode(e) {
         e.preventDefault();
-        if ()
-    }*/
+        if (this.state.password != this.state.repeatedPassword) {
+            // console.log("Inside the if block");
+            this.setState({
+                error: "Ooops. Those passwords are not a match!"
+            });
+        } else {
+            let code = this.state.code;
+            let email = this.state.email;
+            let password = this.state.password;
+            axios.post("/resetpassword/verify", {email, code, password}).then(response=>{
+                // console.log("This is the response:", response);
+                if (response.data) {
+                    // console.log("Inside the secont if block");
+                    this.setState({
+                        stage: 2
+                    });
+                } else {
+                    this.setState({
+                        error: "The code is incorrect!"
+                    });
+                    this.setState({
+                        code: ""
+                    });
+                    this.setState({
+                        password: ""
+                    });
+                    this.setState({
+                        repeatedPassword: ""
+                    });
+                }
+            });
+        }
+    }
 
     getStageHtml() {
         // console.log(this.state.stage);
