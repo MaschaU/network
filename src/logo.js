@@ -6,7 +6,7 @@ import { HashRouter, Route } from "react-router-dom";
 
 export default function Logo() {
     return (
-        <div>
+        <div className="divLogo">
             <img src="./logo.png" />
         </div>
     );

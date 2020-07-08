@@ -47,9 +47,9 @@ export default class Registration extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className="divRegistrationAndLogo">
                 <img src="./logo.png"></img>
-                <form className="registration-form" onSubmit={this.handleSubmit}>
+                <form className="divRegistrationForm" onSubmit={this.handleSubmit}>
                     <input type="text" name="firstName" onChange={this.handleChange} placeholder="First Name" />
                     <input type="text" name="lastName" onChange={this.handleChange} placeholder="Last Name" />
                     <input type="text" name="email" onChange={this.handleChange} placeholder="Email" />

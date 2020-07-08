@@ -15,6 +15,7 @@ export default class Resetpassword extends React.Component {
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmitEmail = this.handleSubmitEmail.bind(this);
         this.getStageHtml = this.getStageHtml.bind(this);
+        this.handleSubmitCode = this.handleSubmitCode.bind(this);
         // console.log("This is this:", this);
     }
     handleChange(e) {
@@ -47,6 +48,11 @@ export default class Resetpassword extends React.Component {
             console.log("Error in axios POST req password:", error);
         });
     }
+
+    /*handleSubmitCode(e) {
+        e.preventDefault();
+        if ()
+    }*/
 
     getStageHtml() {
         // console.log(this.state.stage);
