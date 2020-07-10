@@ -6,7 +6,7 @@ const cookieSession = require("cookie-session");
 const db = require("./sql/db.js");
 const {hash, compare} = require("./bc.js");
 const csurf = require("csurf");
-const {getHashedPassword, getUsersEmail, insertIntoPasswordResetCodes, checkIfTheCodeIsValid, updateUsersPassword} = require("./sql/db.js");
+const {getHashedPassword, getUsersEmail, insertIntoPasswordResetCodes, checkIfTheCodeIsValid, updateUsersPassword, getUserInfo, insertNewUser} = require("./sql/db.js");
 const cryptoRandomString = require('crypto-random-string');
 const { sendEmail } = require("./ses.js");
 
@@ -27,6 +27,35 @@ if (process.env.NODE_ENV != "production") {
 } else {
     app.use("/bundle.js", (req, res) => res.sendFile("${__dirname}/bundle.js"));
 }
+
+// boilerplate file upload
+const multer = require('multer');
+const uidSafe = require('uid-safe');
+const path = require('path');
+
+// multer is storing the files in our upload folder
+const diskStorage = multer.diskStorage({
+    destination: function (req, file, callback) {
+        callback(null, __dirname + '/uploads');
+    },
+    filename: function (req, file, callback) {
+        uidSafe(24).then(function(uid) {
+            callback(null, uid + path.extname(file.originalname));
+        });
+    }
+});
+
+// uploader runs our discStorage that needs to be up to 2MB
+const uploader = multer({
+    storage: diskStorage,
+    limits: {
+        fileSize: 2097152
+    }
+});
+
+// S3
+const s3 = require("./s3.js");
+const {s3Url} = require("./config.json");
 
 
 // middleware
@@ -55,10 +84,31 @@ app.get("/welcome", (req, res) => {
     }
 });
 
-
+app.get("/user", (req, res)=>{
+    console.log("This is not an emplty object:", req.session.userId);
+    if (req.session.userId === undefined || req.session.userId == null || req.session.userId == 0){
+        res.json({}); // probable hack attempt - fail without giving away anything useful
+    }
+    getUserInfo(req.session.id).then((results)=>{
+        // console.log("It's a success!");
+        if (results.rows.length == 1) {
+            const rowReturned = results.rows[0];
+            res.json({ 
+                firstName: rowReturned.firstname,
+                lastName: rowReturned.lastname,
+                profilePic: rowReturned.imageUrl,
+                bio: rowReturned.bio});
+        } else {
+            res.sendStatus (500); // zero or too many rows returned
+        }
+    }).catch((error)=>{
+        console.log("Error in user GET:", error);
+        res.sendStatus(500);
+    });
+});
 
 // all the other routes need to be above *
-// no matter what the url, the * will be served
+// if the user inputs whatever url, the * will be served
 app.get("*", function(req, res) {
     if (!req.session.userId) {
         // console.log("Redirecting to Welcome");
@@ -78,7 +128,7 @@ app.post("/registeredUser", (req, res) => {
         .then((hashedPw) => {
             // console.log("Hashed password:", hashedPw);
             const { firstName, lastName, email, password } = req.body;
-            return db.insertNewUser(firstName, lastName, email, hashedPw);
+            return insertNewUser(firstName, lastName, email, hashedPw);
         })
         .then((results) => {
             // console.log("I'm executing!:", results.rows);
@@ -136,7 +186,7 @@ app.post("/resetpassword/email", (req, res)=>{
             // send an email to the user
             insertIntoPasswordResetCodes(email, secretCode).then(sendEmail(email, "Heres your password reset code", secretCode)
                 .then(() => {
-                    console.log("Empty JSON is:");
+                    // console.log("Empty JSON is:");
                     res.json("Success");
        
                 })

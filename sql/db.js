@@ -59,6 +59,14 @@ module.exports.updateUsersPassword = function (email, password) {
     );
 };
 
+module.exports.getUserInfo = function (id) {
+    return db.query(
+        `
+        SELECT * FROM users WHERE id=$1
+        `, [id]
+    );
+};
+
 /*DATABASE QUERIES FOR PART 3
 SELECT to find user by email (reuse query from Login)
 INSERT into the new table for secret codes

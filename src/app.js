@@ -4,75 +4,67 @@
 // every component we want a user to see must be renderd through App
 // we will get all the info about the user from the App component (via props)
 
-/*import React from "react";
+import React from "react";
 import axios from "./axios";
-import ProfilePic from "./profilepic";
+import {Link} from "react-router-dom";
+import Profilepic from "./profilepic";
 import Uploader from "./uploader";
 import Profile from "./profile";
 
 export default class App extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            uploaderIsVisible: false
+            firstName: "",
+            lastName: "",
+            profilepic: null,
+            bio: null,
+            uploaderVisible: false,
         };
-        this.toggleModal = this.toggleModal.bind(this); 
+        this.componentDidMount = this.componentDidMount.bind(this);
+    
     }
 
     // lifecycle methods
-    componentDidMount() { // runs automatically once the component loads
-        // console.log("my component has mounted!");
-        axios.get("/user").then(response=>{
-            // nmake axios request to server and get info aboput the user(firstName, lastName, profile pic)
-            // store the response from the server in state
-            // get to a point where you can log in this.state and see the users first, last name and profile pic
-            // modify users table to include new column- profile pic
-        });
+    componentDidMount() {
+        axios.get("/user").then((response)=>{
+            console.log("This is the response:", response.data);
+            if (!response.data.profilePic) {
+                response.data.profilePic = "/logo.jpg";
+            }
+            // Careful with this: every single property returned in response.data
+            // will overwrite the corresponding property in the component state.
+            // It will work now, but future addition of fields may overwrite
+            // critical data and introduce hard-to-find bugs
+            // COMMENTED OUT -- this.setState(response.data);
 
+            this.setState({firstName: response.data.firstname});
+            this.setState({lastName: response.data.lastname});
+            this.setState({profilePic: response.data.imageUrl});
+            this.setState({bio: response.data.bio});
+        });
     }
 
-    // our click event function
-    // it updates a state to "true"
-    // toggleModal function needs to be binded because this in toggleModal is undefined
     toggleModal() {
-        // console.log("I'm triggering my toggleModal!");
+        console.log("toggleModal works");
+        if (this.state.uploaderVisible) {
+            this.setState({
+                uploaderVisible: false,
+            });
+        } else {
+            this.setState({
+                uploaderVisible: true,
+            });
+        }
+    }
+
+    setProfilePic(newProfilePic) {
+        console.log("setProfilePic works");
         this.setState({
-            uploaderIsVisible: true,
-        });
-
-
-    }
-
-    // we define a method for receiving a profile pic and putting it in the state
-    // we then pass this function to Uploader
-    setImage(newProfilePic) {
-        this.setState({
-            profilePic: newProfilePic
+            profilepic: newProfilePic,
         });
     }
 
-    render() {
-        console.log("This state is:", this.state);
-        return(
-            <div>
-                <h1>App</h1>
-                <Profile 
-                    first={this.state.first}
-                    last={this.state.last}
-                    imageUrl={this.state.imageUrl}
-                />
-                <ProfilePic 
-                    first={this.state.firstName} 
-                    last={this.state.lastName}   
-                    profilePic={this.state.profilePic}
-                    toggleModal={this.toggleModal}
-                />
-                <p onClick={this.toggleModal}>click me to toggle the modal!</p>
-                { this.state.uploaderIsVisible && <Uploader setImage={this.setImage}/> } 
-            </div>
-        );
-    }
+
+
 }
-
-// if uploaderIsVisible is true &&- render Uploader*/
-// once we render profile, we can delete Profilepic because we're going to render it from inside of the Profile

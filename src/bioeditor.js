@@ -1,4 +1,25 @@
-this.state ={
+import React from "react";
+import axios from "./axios";
+
+export default class Bioeditor extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            sampleBio: "",
+            uploaderIsVisible: false,
+            error: false
+        };
+    
+        
+    }
+
+    
+}
+
+
+
+
+/*this.state ={
     bioEditorIsVisible: true,
     // draftBio keeps track of whatever the user types 
     // on "save" we're making an axios POST request and sending draftBio (storing new bio to db and letting the app know what the final bio is)
@@ -26,4 +47,4 @@ if (this.state.bioEditorIsVisible) {
 
 // this.prompt.setBio(newBio) (it will be called in profileeditor but it runs in App, needs to be binded)
 // draftBio- captures anything that user types
-// newBio- saved version of the bio
+// newBio- saved version of the bio*/
