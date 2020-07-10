@@ -85,25 +85,27 @@ app.get("/welcome", (req, res) => {
 });
 
 app.get("/user", (req, res)=>{
-    console.log("This is not an emplty object:", req.session.userId);
+    console.log("This is not an empty object:", req.session.userId);
     if (req.session.userId === undefined || req.session.userId == null || req.session.userId == 0){
         res.json({}); // probable hack attempt - fail without giving away anything useful
     }
-    getUserInfo(req.session.id).then((results)=>{
+    getUserInfo(req.session.id).then((result)=>{
+        console.log("This is not an empty object2:", req.session.userId);
         // console.log("It's a success!");
-        if (results.rows.length == 1) {
-            const rowReturned = results.rows[0];
+        if (result.rows.length == 1) {
+            const rowReturned = result.rows[0];
+            console.log("This is the first name:", rowReturned.firstname);
             res.json({ 
                 firstName: rowReturned.firstname,
                 lastName: rowReturned.lastname,
                 profilePic: rowReturned.imageUrl,
                 bio: rowReturned.bio});
         } else {
-            res.sendStatus (500); // zero or too many rows returned
+            res.sendStatus(500); // zero or too many rows returned
         }
     }).catch((error)=>{
         console.log("Error in user GET:", error);
-        res.sendStatus(500);
+        
     });
 });
 
@@ -149,9 +151,13 @@ app.post("/registeredUser", (req, res) => {
 app.post("/userLogin", (req, res)=>{
     let password = req.body.password;
     let email = req.body.email;
+    // console.log("The email is:", req.body.email);
     getHashedPassword(email).then((result)=>{
         if((result.rows != undefined) && (result.rows.length>0)) {
-            compare(password, result.rows[0].password_hash).then((match)=>{
+            // console.log("Results in userLogin:", result.rows);
+            const password_hash= result.rows[0].password;
+            console.log("hashed password.", password_hash);
+            compare(password, password_hash).then((match)=>{
                 if(match) {
                     let userId= result.rows[0].id;
                     req.session.userId = userId;

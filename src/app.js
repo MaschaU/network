@@ -43,6 +43,7 @@ export default class App extends React.Component {
             this.setState({profilePic: response.data.imageUrl});
             this.setState({bio: response.data.bio});
         });
+        console.log("This.state in get user:", this.state);
     }
 
     toggleModal() {
