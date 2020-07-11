@@ -1,28 +1,43 @@
-/*import React from "react";
+import React from "react";
 import axios from "./axios";
+
+
 
 export default class Uploader extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            file: "",
+            imageUrl: ""
+        };
+        
     }
 
-    // when the user selects an image, store that image in state
-    // reference the code from the imageboard project
-    // react- get the file from the user and save it in state
-    // we need to use the FormData
-    // once the file is in FormData, we need to create a POST request to send it to server
-    // the last step is to make the profile picture show on the screeen without the user refreshing the page
-    // the complication- the profile picture is stored in the state of App but it's the Uploader who receives a new image
-    
-    demoMethodFOrClassDontUseThisForReal() {
-        this.props.setImage("put the new profile pic url here!");
-        // when Uploader calls this function, the function will run in App
+    uploadProfilePic(e){
+        // e.preventDefault(); 
+        var formData = new FormData();
+        formData.append("file", this.state.file);
+        console.log("This is the form data:", formData);
+        axios.post("uploadProfilePic", formData).then((result)=>{
+            console.log("I'm in the uploadProfilePic axios and the result is:", result);
+            console.log("Profile pic data is:", imageUrl);
+            self.props.setProfilePic(result.data.imageUrl);
+            self.props.toggleModdal();
+        }).catch((error)=>{
+            console.log("Failed monumentally!", error);
+        });
     }
 
     render() {
-        return <div>uploader</div>;
+        return(
+            <div>
+                <p className="closeModal" onClick={() => this.props.toggleUploader()}></p>
+                <form>
+                    <input type="file" name="file" accept="image/*"></input>
+                </form>
+                <button onClick={()=> this.uploadProfilePic()}>Submit</button>
+            </div>
+        );
     }
+    
 }
-
-// the server side of the uploader is the same as in the imageboard, incl. multer and s3*/

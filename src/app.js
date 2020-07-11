@@ -6,10 +6,13 @@
 
 import React from "react";
 import axios from "./axios";
-import {Link} from "react-router-dom";
+import { BrowserRouter, Route, Link, HashRouter } from "react-router-dom";
 import Profilepic from "./profilepic";
 import Uploader from "./uploader";
 import Profile from "./profile";
+
+
+
 
 export default class App extends React.Component {
     constructor(props) {
@@ -38,10 +41,11 @@ export default class App extends React.Component {
             // critical data and introduce hard-to-find bugs
             // COMMENTED OUT -- this.setState(response.data);
 
-            this.setState({firstName: response.data.firstname});
-            this.setState({lastName: response.data.lastname});
+            this.setState({firstName: response.data.firstName});
+            this.setState({lastName: response.data.lastName});
             this.setState({profilePic: response.data.imageUrl});
             this.setState({bio: response.data.bio});
+            console.log(this.state);
         });
         console.log("This.state in get user:", this.state);
     }
@@ -62,10 +66,38 @@ export default class App extends React.Component {
     setProfilePic(newProfilePic) {
         console.log("setProfilePic works");
         this.setState({
-            profilepic: newProfilePic,
+            profilePic: newProfilePic,
         });
     }
 
+    closeModal(){
+        this.setState({
+            uploaderVisible: false
+        });
+    }
+
+    render() {
+        return(
+            <div>
+                <Route exact path="/" render={()=>(
+                    <Profile 
+                        toggleModal={this.toggleModal}
+                    />
+                )}/>
+                {this.state.uploaderVisible&&(
+                    <Uploader setProfilePic={this.setProfilePic}
+                        closeModal={this.closeModal}/>
+                )}
+            </div>
+        );
+    }
+
+  
 
 
 }
+
+/*<HashRouter>
+                    <Link to="/users"></Link>
+                    <Link to="/"><Profilepic profilepic={this.state.profilepic}/></Link>
+                </HashRouter>*/

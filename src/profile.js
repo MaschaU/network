@@ -2,6 +2,8 @@ import React from "react";
 import Profilepic from "./profilepic";
 import Bioeditor from "./bioeditor";
 
+
+
 export default function Profile(props) {
     console.log("props in Profile: ", props);
     return (
@@ -14,7 +16,8 @@ export default function Profile(props) {
                 setImage={props.setImage}
                 profilepic={props.profilepic}
             />
-            <Bioeditor bio={props.bio} sampleBio={props.sampleBio} />
+            <Bioeditor bio={props.bio} draftBio={props.draftBio} />
         </div>
     );
 }
+

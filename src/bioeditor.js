@@ -1,17 +1,31 @@
 import React from "react";
 import axios from "./axios";
 
+
 export default class Bioeditor extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            sampleBio: "",
-            uploaderIsVisible: false,
-            error: false
+            bio : "",
+            draftBio: "",
+            textAreaVisible: false
         };
-    
-        
     }
+
+    componentDidMount(){
+        if(this.props.bio==null){
+            this.setState({
+                bio: null
+            });
+        } else {
+            this.setState({
+                bio: this.props.bio,
+                draftBio: this.props.bio
+            });
+        }
+    }
+
+
 
     
 }

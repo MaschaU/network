@@ -6,7 +6,7 @@ const cookieSession = require("cookie-session");
 const db = require("./sql/db.js");
 const {hash, compare} = require("./bc.js");
 const csurf = require("csurf");
-const {getHashedPassword, getUsersEmail, insertIntoPasswordResetCodes, checkIfTheCodeIsValid, updateUsersPassword, getUserInfo, insertNewUser} = require("./sql/db.js");
+const {getHashedPassword, getUsersEmail, insertIntoPasswordResetCodes, checkIfTheCodeIsValid, updateUsersPassword, getUserInfo, insertNewUser, storeProfilePictures} = require("./sql/db.js");
 const cryptoRandomString = require('crypto-random-string');
 const { sendEmail } = require("./ses.js");
 
@@ -89,8 +89,8 @@ app.get("/user", (req, res)=>{
     if (req.session.userId === undefined || req.session.userId == null || req.session.userId == 0){
         res.json({}); // probable hack attempt - fail without giving away anything useful
     }
-    getUserInfo(req.session.id).then((result)=>{
-        console.log("This is not an empty object2:", req.session.userId);
+    getUserInfo(req.session.userId).then((result)=>{
+        console.log("This is not an empty object2:", result);
         // console.log("It's a success!");
         if (result.rows.length == 1) {
             const rowReturned = result.rows[0];
@@ -211,7 +211,7 @@ app.post("/resetpassword/verify", (req, res)=>{
     // verify if the entered code is the correct one
     // if the codes match, handle the password
     checkIfTheCodeIsValid(email, code).then(result=>{
-        if(result.rows[0]) {
+        if(result.rows.length > 0) {
             // hash the password and update the table
             hash(password).then((hashedPw)=>{
                 return updateUsersPassword(email, hashedPw);
@@ -228,6 +228,16 @@ app.post("/resetpassword/verify", (req, res)=>{
     });
 });
 
+app.post("/uploadProfilePic", (req, res)=>{
+    let userId=req.session.userId;
+    let image= req.body.imageUrl;
+    storeProfilePictures(userId, image).then((result)=>{
+        console.log("The result in uploadProfilePic");
+        res.json(result.rows[0]);
+    }).catch((error)=>{
+        console.log("Bloody error:", error);
+    });
+});
 
 
 app.listen(8080, function() {
