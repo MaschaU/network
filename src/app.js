@@ -20,11 +20,13 @@ export default class App extends React.Component {
         this.state = {
             firstName: "",
             lastName: "",
-            profilepic: null,
+            profilePic: null,
             bio: null,
             uploaderVisible: false,
         };
-        this.componentDidMount = this.componentDidMount.bind(this);
+        this.toggleModal = this.toggleModal.bind(this);
+        this.setProfilePic = this.setProfilePic.bind(this);
+        this.closeModal = this.closeModal.bind(this);
     
     }
 
@@ -79,25 +81,23 @@ export default class App extends React.Component {
     render() {
         return(
             <div>
-                <Route exact path="/" render={()=>(
-                    <Profile 
-                        toggleModal={this.toggleModal}
-                    />
-                )}/>
+                <button onClick={this.toggleModal}>Upload</button>
                 {this.state.uploaderVisible&&(
                     <Uploader setProfilePic={this.setProfilePic}
-                        closeModal={this.closeModal}/>
+                        closeModal={this.closeModal}
+                        toggleModal={this.toggleModal}/>
                 )}
+                <div className="divUploader">
+                    {this.state.firstName}
+                    {this.state.lastName}
+                    <img src={this.state.profilePic}/>
+                    {this.state.bio}
+                </div>
+                
             </div>
         );
     }
 
   
 
-
 }
-
-/*<HashRouter>
-                    <Link to="/users"></Link>
-                    <Link to="/"><Profilepic profilepic={this.state.profilepic}/></Link>
-                </HashRouter>*/

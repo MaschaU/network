@@ -6,11 +6,11 @@ let secrets;
 if (process.env.NODE_ENV == 'production') {
     secrets = process.env; // in prod the secrets are environment variables
 } else {
-    secrets = require('./secrets'); // in dev they are in secrets.json which is listed in .gitignore
+    secrets = require('./secrets.json'); // in dev they are in secrets.json which is listed in .gitignore
 }
 
 const s3 = new aws.S3({
-    accessKeyId: secrets.AWS_ID,
+    accessKeyId: secrets.AWS_KEY,
     secretAccessKey: secrets.AWS_SECRET
     
 });
@@ -20,6 +20,7 @@ const s3 = new aws.S3({
 /* MIDDLEWARE FOR s3 */
 exports.upload = (req, res, next) => {
     if (!req.file) {
+        //console.log(secrets.AWS_KEY + "/" + secrets.AWS_SECRET);
         //upload did not work
         console.log("Error in 500!!:");
         return res.sendStatus(500);

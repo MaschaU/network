@@ -6,7 +6,7 @@ const cookieSession = require("cookie-session");
 const db = require("./sql/db.js");
 const {hash, compare} = require("./bc.js");
 const csurf = require("csurf");
-const {getHashedPassword, getUsersEmail, insertIntoPasswordResetCodes, checkIfTheCodeIsValid, updateUsersPassword, getUserInfo, insertNewUser, storeProfilePictures} = require("./sql/db.js");
+const {getHashedPassword, getUsersEmail, insertIntoPasswordResetCodes, checkIfTheCodeIsValid, updateUsersPassword, getUserInfo, insertNewUser, storeProfilePicture} = require("./sql/db.js");
 const cryptoRandomString = require('crypto-random-string');
 const { sendEmail } = require("./ses.js");
 
@@ -228,11 +228,31 @@ app.post("/resetpassword/verify", (req, res)=>{
     });
 });
 
+app.post("/upload", uploader.single("file"), s3.upload, (req, res)=>{
+    const {filename} = req.file;
+    const url = `${s3Url}${filename}`;
+    console.log("This is the url", url);
+
+    const userId = req.session.userId;
+
+    storeProfilePicture(userId, url).then(({rows})=>{
+        return res.json({url: url});
+    }).catch(error=>{
+        console.log(error);
+    });
+});
+
+
+
+
+
 app.post("/uploadProfilePic", (req, res)=>{
     let userId=req.session.userId;
     let image= req.body.imageUrl;
-    storeProfilePictures(userId, image).then((result)=>{
-        console.log("The result in uploadProfilePic");
+    console.log("Upload POST:", req.body.imageUrl);
+    console.log("This is the image:", image);
+    storeProfilePicture(userId, image).then((result)=>{
+        console.log("The result in uploadProfilePic is:", image);
         res.json(result.rows[0]);
     }).catch((error)=>{
         console.log("Bloody error:", error);

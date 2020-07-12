@@ -14,7 +14,7 @@ export default function Profile(props) {
             <Profilepic
                 toggleModal={props.toggleModal}
                 setImage={props.setImage}
-                profilepic={props.profilepic}
+                profilePic={props.profilePic}
             />
             <Bioeditor bio={props.bio} draftBio={props.draftBio} />
         </div>
