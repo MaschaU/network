@@ -28,7 +28,7 @@ if (process.env.NODE_ENV != "production") {
     app.use("/bundle.js", (req, res) => res.sendFile("${__dirname}/bundle.js"));
 }
 
-// boilerplate file upload
+// boilerplate code for file upload
 const multer = require('multer');
 const uidSafe = require('uid-safe');
 const path = require('path');
@@ -45,7 +45,7 @@ const diskStorage = multer.diskStorage({
     }
 });
 
-// uploader runs our discStorage that needs to be up to 2MB
+// uploader runs our discStorage that can't be larger than 2MB
 const uploader = multer({
     storage: diskStorage,
     limits: {
@@ -94,11 +94,11 @@ app.get("/user", (req, res)=>{
         // console.log("It's a success!");
         if (result.rows.length == 1) {
             const rowReturned = result.rows[0];
-            console.log("This is the first name:", rowReturned.firstname);
+            // console.log("This is the first name:", rowReturned.firstname);
             res.json({ 
                 firstName: rowReturned.firstname,
                 lastName: rowReturned.lastname,
-                profilePic: rowReturned.imageUrl,
+                profilePic: rowReturned.imageurl,
                 bio: rowReturned.bio});
         } else {
             res.sendStatus(500); // zero or too many rows returned
@@ -110,7 +110,7 @@ app.get("/user", (req, res)=>{
 });
 
 // all the other routes need to be above *
-// if the user inputs whatever url, the * will be served
+// if the user inputs gibberish url, the * will be served
 app.get("*", function(req, res) {
     if (!req.session.userId) {
         // console.log("Redirecting to Welcome");
@@ -156,7 +156,7 @@ app.post("/userLogin", (req, res)=>{
         if((result.rows != undefined) && (result.rows.length>0)) {
             // console.log("Results in userLogin:", result.rows);
             const password_hash= result.rows[0].password;
-            console.log("hashed password.", password_hash);
+            // console.log("hashed password.", password_hash);
             compare(password, password_hash).then((match)=>{
                 if(match) {
                     let userId= result.rows[0].id;
@@ -166,7 +166,7 @@ app.post("/userLogin", (req, res)=>{
                     res.json("Failure");
                 }
             }).catch((error)=>{
-                console.log("The inner error:", error);
+                // console.log("The inner error:", error);
                 res.json("Failure");
             }).catch(error=>{
                 console.log("Last error in login post:", error);
@@ -180,7 +180,7 @@ app.post("/resetpassword/email", (req, res)=>{
     // verify the users email address and then
     let email = req.body.email;
     getUsersEmail(email).then(result=>{
-        console.log("Rows before the if statement:", result.rows);
+        // console.log("Rows before the if statement:", result.rows);
         if(result.rows.length>0){
             // console.log("The result rows is:", result.rows);
             // generate the secret code
@@ -231,10 +231,8 @@ app.post("/resetpassword/verify", (req, res)=>{
 app.post("/upload", uploader.single("file"), s3.upload, (req, res)=>{
     const {filename} = req.file;
     const url = `${s3Url}${filename}`;
-    console.log("This is the url", url);
-
+    // console.log("This is the url", url);
     const userId = req.session.userId;
-
     storeProfilePicture(userId, url).then(({rows})=>{
         return res.json({url: url});
     }).catch(error=>{
@@ -242,17 +240,13 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res)=>{
     });
 });
 
-
-
-
-
 app.post("/uploadProfilePic", (req, res)=>{
     let userId=req.session.userId;
     let image= req.body.imageUrl;
-    console.log("Upload POST:", req.body.imageUrl);
-    console.log("This is the image:", image);
+    // console.log("Upload POST:", req.body.imageUrl);
+    // console.log("This is the image:", image);
     storeProfilePicture(userId, image).then((result)=>{
-        console.log("The result in uploadProfilePic is:", image);
+        // console.log("The result in uploadProfilePic is:", image);
         res.json(result.rows[0]);
     }).catch((error)=>{
         console.log("Bloody error:", error);
@@ -263,3 +257,13 @@ app.post("/uploadProfilePic", (req, res)=>{
 app.listen(8080, function() {
     console.log("I'm listening.");
 });
+
+
+/*
+
+FOR FRIENDSHIPS FEATURE we need a four server routes:
+- GET /getinitialstatus/:id
+- POST /makefriendrequest/:id
+- POST /acceptfriendrequest/:id
+- POST /endfrienship/:id
+*/

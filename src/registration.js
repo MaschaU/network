@@ -63,3 +63,22 @@ export default class Registration extends React.Component {
         );
     }
 }
+
+//HOOKS//
+/*import {useStatefulFields} from "./hooks/useStatefulFields";
+import {useAuthSubmit} from "./hooks/useAuthSubmit";
+export default function Registration(){
+    const [values, handleChange ] = useStatefulFields();
+    const [error, handleCLick] = useAuthSubmit("/registration", value);
+    return(
+        <div>
+            {error && <p>Something broke!</p>}
+            <input name="firstName" onChange={handleChange}/>
+            <input name="lastName" onChange={handleChange}/>
+            <input name="email" onChange={handleChange}/>
+            <input name="password" onChange={handleChange}/>
+            <button onCLick={handleClick}>Submit</button>
+        
+        </div>
+    );
+}*/

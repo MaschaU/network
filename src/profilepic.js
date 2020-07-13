@@ -5,7 +5,7 @@ import React from "react";
 
 
 export default function Profilepic(props) {
-    console.log("Props in profile pic received from App:", props);
+    // console.log("Props in profile pic received from App:", props);
     if (!props.firstName){
         return(
             <div>

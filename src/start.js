@@ -4,6 +4,8 @@ import Welcome from './welcome.js';
 import Logo from "./logo";
 import App from "./app";
 
+
+
 let elem;
 if (location.pathname === '/welcome') {
     elem = <Welcome />;

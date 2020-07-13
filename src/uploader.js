@@ -16,19 +16,19 @@ export default class Uploader extends React.Component {
 
     onFileChange(e) {
         this.setState({file: e.target.files[0]});
-        console.log("File selected");
+        // console.log("File selected");
     }
 
     uploadProfilePic(e){
         // e.preventDefault(); 
-        console.log("Profile picture uploader works. Woop! Woop!");
+        // console.log("Profile picture uploader works. Woop! Woop!");
         var formData = new FormData();
         formData.append("file", this.state.file, this.state.file.name);
-        console.log("This is the form data:", formData);
+        // console.log("This is the form data:", formData);
         axios.post("upload", formData).then((result)=>{
-            console.log("I'm in the uploadProfilePic axios and the result is:", result);
+            // console.log("I'm in the uploadProfilePic axios and the result is:", result);
             let profilePic = result.data.url;
-            console.log("Profile pic data is:", profilePic);
+            // console.log("Profile pic data is:", profilePic);
             this.props.setProfilePic(profilePic);
             this.props.toggleModal();
         }).catch((error)=>{

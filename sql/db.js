@@ -74,6 +74,24 @@ module.exports.storeProfilePicture= function (id, imageUrl) {
         `, [id, imageUrl]
     );
 };
+/*
+WE WILL NEED FOUR ADDITIONAL QUERIES:
+
+- a SELECT query to determine what the button should say when the component mount(before the user clicks any button)
+
+  function getInitialStatus(myId, otherId) {
+      return db.query(`
+           SELECT * FROM friendships
+           WHERE (receiver_id = $1 AND sender_id = $2)
+           OR (receiver_id = $2 AND sender_id = $1);
+           `, [ myId, otherId ]
+      )
+  }
+
+  - an INSERT query that runs when user clicks "accept frien request" button is clicked. It will insert two users ids(sender and receiver)
+  - an UPDATE of "accepted" column from false to true
+  - DELETE that runs when friend request is canceled or "end froiendship" is clicked
+*/
 
 
 

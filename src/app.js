@@ -33,7 +33,7 @@ export default class App extends React.Component {
     // lifecycle methods
     componentDidMount() {
         axios.get("/user").then((response)=>{
-            console.log("This is the response:", response.data);
+            // console.log("This is the response:", response.data);
             if (!response.data.profilePic) {
                 response.data.profilePic = "/logo.jpg";
             }
@@ -45,15 +45,15 @@ export default class App extends React.Component {
 
             this.setState({firstName: response.data.firstName});
             this.setState({lastName: response.data.lastName});
-            this.setState({profilePic: response.data.imageUrl});
+            this.setState({profilePic: response.data.profilePic});
             this.setState({bio: response.data.bio});
-            console.log(this.state);
+            // console.log(this.state);
         });
         console.log("This.state in get user:", this.state);
     }
 
     toggleModal() {
-        console.log("toggleModal works");
+        // console.log("toggleModal works");
         if (this.state.uploaderVisible) {
             this.setState({
                 uploaderVisible: false,
@@ -66,7 +66,7 @@ export default class App extends React.Component {
     }
 
     setProfilePic(newProfilePic) {
-        console.log("setProfilePic works");
+        // console.log("setProfilePic works");
         this.setState({
             profilePic: newProfilePic,
         });
