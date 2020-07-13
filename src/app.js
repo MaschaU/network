@@ -10,6 +10,7 @@ import { BrowserRouter, Route, Link, HashRouter } from "react-router-dom";
 import Profilepic from "./profilepic";
 import Uploader from "./uploader";
 import Profile from "./profile";
+import Bioeditor from "./bioeditor";
 
 
 
@@ -72,6 +73,8 @@ export default class App extends React.Component {
         });
     }
 
+    
+
     closeModal(){
         this.setState({
             uploaderVisible: false
@@ -93,6 +96,8 @@ export default class App extends React.Component {
                     <img src={this.state.profilePic}/>
                     {this.state.bio}
                 </div>
+                <Bioeditor
+                    draftBio={this.state.bio}/>
                 
             </div>
         );

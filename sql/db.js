@@ -67,11 +67,19 @@ module.exports.getUserInfo = function (id) {
     );
 };
 
-module.exports.storeProfilePicture= function (id, imageUrl) {
+module.exports.storeProfilePicture = function (id, imageUrl) {
     return db.query(
         `
         UPDATE users SET imageUrl=$2 WHERE id=$1
         `, [id, imageUrl]
+    );
+};
+
+module.exports.updateUsersBio = function(id, bio) {
+    return db. query(
+        `
+        UPDATE users SET bio=$2 WHERE id=$1
+        `, [id, bio]
     );
 };
 /*
