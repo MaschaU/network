@@ -40,22 +40,29 @@ export default class Bioeditor extends React.Component {
     }
 
     setUsersBio() {
-        // console.log("Fire up that bio!!!");
         const bio = this.state.draftBio;
         if (bio !="") {
             axios.post("bioediting", { bio:bio }).then((result)=>{
                 if(result) {
-                   this.setState({
-                       bio: bio
-                   });
-               } else {
-                   console.log("You f###ed up!");
-               }
+                    this.setState({
+                        bio: bio
+                    });
+                } else {
+                    console.log("You f###ed up!");
+                }
             }).catch((error)=>{
                 console.log("Error in setUsersBio axios:", error);
             });
         }
     }
+
+    clickToEdit() {
+        this.setState({
+            draftBio : this.props.bio
+        });
+    }
+
+
 
     handleChange(e) {
         this.setState({
@@ -82,6 +89,7 @@ export default class Bioeditor extends React.Component {
         return(
             <div>
                 {this.props.bio}
+                <button onClick={()=> this.clickToEdit()}>Edit your bio</button>
             </div>
         );
 

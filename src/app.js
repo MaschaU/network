@@ -98,6 +98,7 @@ export default class App extends React.Component {
                 </div>
                 <Bioeditor
                     draftBio={this.state.bio}/>
+                    
                 
             </div>
         );
