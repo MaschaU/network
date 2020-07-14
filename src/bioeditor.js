@@ -81,11 +81,11 @@ export default class Bioeditor extends React.Component {
     clickToEdit() {
         // console.log("clickToEdit is here!");
         this.setState({
-            draftBio : this.state.bio
-            
+            draftBio : this.state.bio,
+            textAreaVisible: true
         });
         
-        console.log("This is my this.state.bio:", this.props.bio);
+        console.log("This CLICKTOEDIT is my this.state.bio:", this.props.bio);
     }
 
     handleChange(e) {
@@ -104,13 +104,26 @@ export default class Bioeditor extends React.Component {
         console.log("This is my draftBio:", draftBio);
         console.log("Bio state is ", this.state.bio);
         const bio = this.state.bio;
-        if (draftBio) {
+        if (this.state.textAreaVisible) {
+        
             return(
                 <div>
                     <textarea value={this.state.draftBio} onChange={this.handleChange}/>
                     <button onClick={this.clickToEdit}>Save</button>
+                    <button>Cancel</button>
                 </div>
+                    
             );
+        } else {
+            if(bio){
+                return(
+                    <div>
+                        {bio}
+                        <button onClick={this.clickToEdit}>Edit bio</button>
+                    </div>
+                        
+                );
+            } 
         }
 
     }
@@ -121,8 +134,7 @@ export default class Bioeditor extends React.Component {
         }
         return(
             <div>
-                {this.state.bio}
-                <button onClick={()=> this.clickToEdit()}>Edit your bio</button>
+             
                 {this.renderBio()}
             </div>
         );
