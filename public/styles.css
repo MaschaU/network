@@ -41,6 +41,8 @@ h1 {
     
 }
 
+.anzColor{ color: hotpink;}
+
 .divRegistrationAndLogo {
     display: flex;
     justify-content: center;

@@ -85,9 +85,9 @@ export default class Bioeditor extends React.Component {
         axios.post("/setBio", {bio: this.state.draftBio}).then((result)=>{
             this.setState({
                 bio: this.state.draftBio
-            }).catch((error)=>{
-                console.logf("Error in setting the bio:", error);
             });
+        }).catch((error)=>{
+            console.log("Error in setting the bio:", error);
         });
     }
 
@@ -121,14 +121,16 @@ export default class Bioeditor extends React.Component {
             if(bio != null){
                 return(
                     <div>
-                        {bio}
+                        <p className='anzColor'>{bio}</p>
                         <button onClick={this.clickToEdit}>Edit bio</button>
                     </div>
                         
                 );
             }
             else {
-                <button onClick={this.clickToEdit}>Add bio</button>
+                return(
+                    <button onClick={this.clickToEdit}>Add bio</button>
+                );
             }
         }
 

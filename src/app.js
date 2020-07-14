@@ -99,7 +99,7 @@ export default class App extends React.Component {
                     {this.state.firstName}
                     {this.state.lastName}
                     <img src={this.state.profilePic} />
-                    {bio}
+
                 </div>
                 <Bioeditor
                     bio={bio} />
