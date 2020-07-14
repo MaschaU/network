@@ -82,6 +82,9 @@ export default class App extends React.Component {
     }
 
     render() {
+        const bio = this.state.bio;
+        console.log("render bio is ", bio);
+
         return(
             <div>
                 <button onClick={this.toggleModal}>Upload</button>
@@ -93,12 +96,11 @@ export default class App extends React.Component {
                 <div className="divUploader">
                     {this.state.firstName}
                     {this.state.lastName}
-                    <img src={this.state.profilePic}/>
-                    {this.state.bio}
+                    <img src={this.state.profilePic} />
+                    {bio}
                 </div>
                 <Bioeditor
-                    draftBio={this.state.bio}/>
-                    
+                    bio={bio} />
                 
             </div>
         );
