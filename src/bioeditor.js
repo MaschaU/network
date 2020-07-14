@@ -14,9 +14,10 @@ export default class Bioeditor extends React.Component {
         console.log(this.props.bio);
         console.log(props);
         this.clickToEdit = this.clickToEdit.bind(this);
-        this.setUsersBio = this.setUsersBio.bind(this);
         this.handleChange = this.handleChange.bind(this);
         this.renderBio = this.renderBio.bind(this);
+        this.clickToSave = this.clickToSave.bind(this);
+        this.setBio = this.setBio.bind(this);
     
     }
 
@@ -61,23 +62,6 @@ export default class Bioeditor extends React.Component {
         }
     }
 
-    setUsersBio() {
-        const bio = this.state.draftBio;
-        if (bio !="") {
-            axios.post("bioediting", { bio:bio }).then((result)=>{
-                if(result) {
-                    this.setState({
-                        bio: bio
-                    });
-                } else {
-                    console.log("You f###ed up!");
-                }
-            }).catch((error)=>{
-                console.log("Error in setUsersBio axios:", error);
-            });
-        }
-    }
-
     clickToEdit() {
         // console.log("clickToEdit is here!");
         this.setState({
@@ -86,6 +70,25 @@ export default class Bioeditor extends React.Component {
         });
         
         console.log("This CLICKTOEDIT is my this.state.bio:", this.props.bio);
+    }
+
+    clickToSave() {
+        this.setState({
+            bio: this.state.draftBio,
+            textAreaVisible: false
+        });
+        this.setBio();
+    }
+
+    setBio() {
+        console.log("newBio in da house");
+        axios.post("/setBio", {bio: this.state.draftBio}).then((result)=>{
+            this.setState({
+                bio: this.state.draftBio
+            }).catch((error)=>{
+                console.logf("Error in setting the bio:", error);
+            });
+        });
     }
 
     handleChange(e) {
@@ -109,13 +112,13 @@ export default class Bioeditor extends React.Component {
             return(
                 <div>
                     <textarea value={this.state.draftBio} onChange={this.handleChange}/>
-                    <button onClick={this.clickToEdit}>Save</button>
+                    <button onClick={this.clickToSave}>Save</button>
                     <button>Cancel</button>
                 </div>
                     
             );
         } else {
-            if(bio){
+            if(bio != null){
                 return(
                     <div>
                         {bio}
@@ -123,7 +126,10 @@ export default class Bioeditor extends React.Component {
                     </div>
                         
                 );
-            } 
+            }
+            else {
+                <button onClick={this.clickToEdit}>Add bio</button>
+            }
         }
 
     }

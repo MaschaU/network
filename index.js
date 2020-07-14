@@ -6,7 +6,7 @@ const cookieSession = require("cookie-session");
 const db = require("./sql/db.js");
 const {hash, compare} = require("./bc.js");
 const csurf = require("csurf");
-const {getHashedPassword, getUsersEmail, insertIntoPasswordResetCodes, checkIfTheCodeIsValid, updateUsersPassword, getUserInfo, insertNewUser, storeProfilePicture} = require("./sql/db.js");
+const {getHashedPassword, getUsersEmail, insertIntoPasswordResetCodes, checkIfTheCodeIsValid, updateUsersPassword, getUserInfo, insertNewUser, storeProfilePicture, updateUsersBio} = require("./sql/db.js");
 const cryptoRandomString = require('crypto-random-string');
 const { sendEmail } = require("./ses.js");
 
@@ -250,6 +250,16 @@ app.post("/uploadProfilePic", (req, res)=>{
         res.json(result.rows[0]);
     }).catch((error)=>{
         console.log("Bloody error:", error);
+    });
+});
+
+app.post("/setBio", (req, res)=>{
+    let bio=req.body.bio;
+    let userId=req.session.userId;
+    db.updateUsersBio(userId, bio).then((result)=>{
+        res.json(result.rows[0]);
+    }).catch((error)=>{
+        console.log("There is an error in setBio post:", error);
     });
 });
 
