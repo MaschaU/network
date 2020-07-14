@@ -43,7 +43,7 @@ export default class Bioeditor extends React.Component {
         console.log("Receiving new props");
         if (this.state.bio == undefined || this.state.bio == null){
             if (newProperties.bio != undefined && newProperties.bio != null){
-                console.log(" -- setting new props, too");
+                // console.log(" -- setting new props, too");
                 this.setState({bio: newProperties.bio});
             }
         }
@@ -68,8 +68,7 @@ export default class Bioeditor extends React.Component {
             draftBio : this.state.bio,
             textAreaVisible: true
         });
-        
-        console.log("This CLICKTOEDIT is my this.state.bio:", this.props.bio);
+        // console.log("This CLICKTOEDIT is my this.state.bio:", this.props.bio);
     }
 
     clickToSave() {
@@ -81,7 +80,7 @@ export default class Bioeditor extends React.Component {
     }
 
     setBio() {
-        console.log("newBio in da house");
+        // console.log("newBio in da house");
         axios.post("/setBio", {bio: this.state.draftBio}).then((result)=>{
             this.setState({
                 bio: this.state.draftBio
@@ -104,18 +103,16 @@ export default class Bioeditor extends React.Component {
     renderBio() {
         // console.log("Render bio!!!");
         const draftBio = this.state.draftBio;
-        console.log("This is my draftBio:", draftBio);
-        console.log("Bio state is ", this.state.bio);
+        // console.log("This is my draftBio:", draftBio);
+        // console.log("Bio state is ", this.state.bio);
         const bio = this.state.bio;
         if (this.state.textAreaVisible) {
-        
             return(
                 <div>
                     <textarea value={this.state.draftBio} onChange={this.handleChange}/>
                     <button onClick={this.clickToSave}>Save</button>
                     <button>Cancel</button>
                 </div>
-                    
             );
         } else {
             if(bio != null){
@@ -138,21 +135,12 @@ export default class Bioeditor extends React.Component {
 
     render() {
         if (this.props.bio && !this.state.displayTextInputArea) {
-            console.log("Bio is onboard!!");
+            // console.log("Bio is onboard!!");
         }
         return(
             <div>
-             
                 {this.renderBio()}
             </div>
         );
-
-
-
-    
     }
-
-
-
-
 }
