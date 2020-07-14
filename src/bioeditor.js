@@ -104,9 +104,12 @@ export default class Bioeditor extends React.Component {
         console.log("This is my draftBio:", draftBio);
         console.log("Bio state is ", this.state.bio);
         const bio = this.state.bio;
-        if (draftBio != null) {
+        if (draftBio) {
             return(
-                <textarea onChange={this.handleChange}/>
+                <div>
+                    <textarea value={this.state.draftBio} onChange={this.handleChange}/>
+                    <button onClick={this.clickToEdit}>Save</button>
+                </div>
             );
         }
 
