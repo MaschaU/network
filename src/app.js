@@ -12,6 +12,7 @@ import Uploader from "./uploader";
 import Profile from "./profile";
 import Bioeditor from "./bioeditor";
 import Otherprofile from "./otherprofile";
+import Findpeople from "./findpeople";
 
 
 
@@ -80,6 +81,7 @@ export default class App extends React.Component {
                         toggleModal={this.toggleModal}/>
                 )}
                 <Bioeditor bio={bio} />
+                <Findpeople/>
             </div>
         );
     }

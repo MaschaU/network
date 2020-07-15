@@ -3,4 +3,32 @@
 // render clickable profile pics, firstname and lastname
 // query for users via pattern matching (we're not quering for the exact match)
 // pattern matching to be accomplished via ILIKE (WHERE name ILIKE "$1%", [val +"%"])
-// 
+import React, {useState, useEffect} from "react";
+import axios from "./axios";
+import {Link} from "react-router-dom";
+import { render } from "react-dom";
+
+export default function Findpeople(props){
+    const [newestUser, setNewestUser] = useState([]);
+    
+
+    useEffect(()=>{
+        console.log("The list of newest users rendering!")
+        axios.get("/newestUser").then((result)=>{
+            console.log("This is the last user who joined:", result);
+            setNewestUser(result.data);
+        });
+    });
+
+    
+    return(
+        <div>
+            <h1>I am rendering!</h1>
+        </div>
+    )
+
+    
+
+
+
+}

@@ -6,7 +6,7 @@ const cookieSession = require("cookie-session");
 const db = require("./sql/db.js");
 const {hash, compare} = require("./bc.js");
 const csurf = require("csurf");
-const {getHashedPassword, getUsersEmail, insertIntoPasswordResetCodes, checkIfTheCodeIsValid, updateUsersPassword, getUserInfo, insertNewUser, storeProfilePicture, updateUsersBio} = require("./sql/db.js");
+const {getHashedPassword, getUsersEmail, insertIntoPasswordResetCodes, checkIfTheCodeIsValid, updateUsersPassword, getUserInfo, insertNewUser, storeProfilePicture, updateUsersBio, getNewestUser} = require("./sql/db.js");
 const cryptoRandomString = require('crypto-random-string');
 const { sendEmail } = require("./ses.js");
 
@@ -106,6 +106,19 @@ app.get("/user", (req, res)=>{
     }).catch((error)=>{
         console.log("Error in user GET:", error);
         
+    });
+});
+
+app.get("/newestUser", (req, res)=>{
+    let userId = req.session;
+    getNewestUser(userId).then((result)=>{
+        if(result) {
+            res.json(result);
+        } else {
+            res.json("Failure");
+        }
+    }).catch((error)=>{
+        console.log("Error in getNewestUser:", error);
     });
 });
 
@@ -280,6 +293,8 @@ app.post("/api-userinfo", (req, res)=>{
         console.log("Error in getting other users:", error);
     });
 });
+
+
 
 
 app.listen(8080, function() {

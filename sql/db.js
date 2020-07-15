@@ -82,6 +82,16 @@ module.exports.updateUsersBio = function(id, bio) {
         `, [id, bio]
     );
 };
+
+module.exports.getNewestUser = function() {
+    return db.query(
+        `
+        SELECT id, firstname, lastname, imageurl FROM users ORDER BY id DESC LIMIT 3
+        `
+    );
+};
+
+
 /*
 WE WILL NEED FOUR ADDITIONAL QUERIES:
 
