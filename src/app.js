@@ -11,6 +11,7 @@ import Profilepic from "./profilepic";
 import Uploader from "./uploader";
 import Profile from "./profile";
 import Bioeditor from "./bioeditor";
+import Otherprofile from "./otherprofile";
 
 
 
@@ -65,13 +66,14 @@ export default class App extends React.Component {
                 <BrowserRouter>
                     <div>
                         <Route exact path="/" render={()=>(
-                            <Profile/>
+                            <Profile overrideProfilePic={this.state.profilePic}/>
                         )}
                         />
-                        
+                        <Route path="/user/:id" component={Otherprofile}/>
+                            
                     </div>   
                 </BrowserRouter>
-                <button onClick={this.toggleModal}>Upload</button>
+                <button onClick={this.toggleModal}>Set your photo</button>
                 {this.state.uploaderVisible&&(
                     <Uploader setProfilePic={this.setProfilePic}
                         closeModal={this.closeModal}

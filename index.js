@@ -256,10 +256,28 @@ app.post("/uploadProfilePic", (req, res)=>{
 app.post("/setBio", (req, res)=>{
     let bio=req.body.bio;
     let userId=req.session.userId;
-    db.updateUsersBio(userId, bio).then((result)=>{
+    updateUsersBio(userId, bio).then((result)=>{
         res.json(result.rows[0]);
     }).catch((error)=>{
         console.log("There is an error in setBio post:", error);
+    });
+});
+
+app.post("/api-userinfo", (req, res)=>{
+    let requestedUserId = req.body.requestedUserId;
+    getUserInfo(requestedUserId).then((result)=>{
+        console.log("Request user id is:", requestedUserId);
+        if (result.rows.length == 1) {
+            let rowReturned = result.rows[0];
+            console.log("Row:", rowReturned);
+            res.json({ 
+                firstName: rowReturned.firstname,
+                lastName: rowReturned.lastname,
+                profilePic: rowReturned.imageurl,
+                bio: rowReturned.bio});
+        }
+    }).catch((error)=>{
+        console.log("Error in getting other users:", error);
     });
 });
 

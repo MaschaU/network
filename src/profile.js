@@ -4,7 +4,7 @@ import Bioeditor from "./bioeditor";
 import axios from "./axios";
 
 
-export default class App extends React.Component {
+export default class Profile extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -34,6 +34,18 @@ export default class App extends React.Component {
             // console.log(this.state);
         });
         console.log("This.state in get user:", this.state);
+    }
+
+    UNSAFE_componentWillReceiveProps(newProperties){
+        // We can't receive this in the constructor, because the parent component
+        // has not retrieved the data from the database yet. It will be passed to
+        // componentWillReceiveProps in a later render, at which point we copy
+        // it to our state on the first receive of valid data.
+        console.log("Receiving new props");
+        if (newProperties.overrideProfilePic != undefined && newProperties.overrideProfilePic != null && newProperties.overrideProfilePic.length > 0){
+            // console.log(" -- setting new props, too");
+            this.setState({profilePic: newProperties.overrideProfilePic});
+        }
     }
 
     render() {
