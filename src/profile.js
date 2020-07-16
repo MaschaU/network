@@ -19,7 +19,7 @@ export default class Profile extends React.Component {
         axios.get("/user").then((response)=>{
             console.log("This is the response:", response.data);
             if (!response.data.profilePic) {
-                response.data.profilePic = "/logo.jpg";
+                response.data.profilePic = "/logo.png";
             }
             // Careful with this: every single property returned in response.data
             // will overwrite the corresponding property in the component state.

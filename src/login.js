@@ -35,11 +35,13 @@ export default class Login extends React.Component {
     }
     render(){
         return(
-            <div>
+            <div className="divRegistrationAndLogo">
+                <img src="./logo.png"></img>
+    
                 <form onSubmit={this.handleSubmit}>
                     <input type="text" name="email" onChange={this.handleChange} placeholder="Email" />
                     <input type="text" name="password" onChange={this.handleChange} placeholder="Password" />
-                    <button>Login</button>
+                    <button className="glow-on-hover">Login</button>
                 </form>
                 <label>{this.state.error}</label>
                 <Link to="/resetpassword">Reset your password</Link>

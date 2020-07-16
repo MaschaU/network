@@ -1,9 +1,5 @@
 import React from "react";
 import axios from "./axios";
-import Profile from "./profile";
-import Profilepic from "./profilepic";
-import Bioeditor from "./bioeditor";
-
 
 export default class Otherprofile extends React.Component {
     constructor(props) {
@@ -58,12 +54,10 @@ export default class Otherprofile extends React.Component {
                 <h1>
                     {this.state.firstName} {this.state.lastName}
                 </h1>
-                <Profilepic
-                    toggleModal={this.state.toggleModal}
-                    setImage={this.state.setImage}
-                    profilePic={this.state.profilePic}
-                />
-                <Bioeditor bio={this.state.bio} draftBio={this.state.draftBio} />
+                <img src={this.state.profilePic}/>
+                <p>
+                    {this.state.bio}
+                </p>
             </div>
         );
     }

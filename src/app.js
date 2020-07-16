@@ -62,25 +62,30 @@ export default class App extends React.Component {
     render() {
         const bio = this.state.bio;
         // console.log("render bio is ", bio);
+
+        var uploadConditionalTemplate = <Uploader setProfilePic={this.setProfilePic} closeModal={this.closeModal} toggleModal={this.toggleModal}/>;
+        if (!this.state.uploaderVisible){
+            uploadConditionalTemplate = "";
+        }
+
         return(
             <div>
                 <BrowserRouter>
                     <div>
                         <Route exact path="/" render={()=>(
-                            <Profile overrideProfilePic={this.state.profilePic}/>
+                            <div>
+                                <Profile overrideProfilePic={this.state.profilePic}/>
+                                <button onClick={this.toggleModal}>Set your photo</button>
+                                {uploadConditionalTemplate}
+                                <Bioeditor bio={bio} />
+                            </div>
                         )}
                         />
                         <Route path="/user/:id" component={Otherprofile}/>
                             
                     </div>   
                 </BrowserRouter>
-                <button onClick={this.toggleModal}>Set your photo</button>
-                {this.state.uploaderVisible&&(
-                    <Uploader setProfilePic={this.setProfilePic}
-                        closeModal={this.closeModal}
-                        toggleModal={this.toggleModal}/>
-                )}
-                <Bioeditor bio={bio} />
+                
                 <Findpeople/>
             </div>
         );

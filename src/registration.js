@@ -49,14 +49,17 @@ export default class Registration extends React.Component {
         return (
             <div className="divRegistrationAndLogo">
                 <img src="./logo.png"></img>
-                <form className="divRegistrationForm" onSubmit={this.handleSubmit}>
-                    <input type="text" name="firstName" onChange={this.handleChange} placeholder="First Name" />
-                    <input type="text" name="lastName" onChange={this.handleChange} placeholder="Last Name" />
-                    <input type="text" name="email" onChange={this.handleChange} placeholder="Email" />
-                    <input type="text" name="password" onChange={this.handleChange} placeholder="Password" />
-                    <input type="text" name="repeatedPassword" onChange={this.handleChange} placeholder="Re-type Password" />
-                    <button>Sign Up!</button>
-                </form>
+                <div className="divForm">
+                    <form className="divRegistrationForm" onSubmit={this.handleSubmit}>
+                        <input type="text" name="firstName" onChange={this.handleChange} placeholder="First Name" />
+                        <input type="text" name="lastName" onChange={this.handleChange} placeholder="Last Name" />
+                        <input type="text" name="email" onChange={this.handleChange} placeholder="Email" />
+                        <input type="text" name="password" onChange={this.handleChange} placeholder="Password" />
+                        <input type="text" name="repeatedPassword" onChange={this.handleChange} placeholder="Re-type Password" />
+                        <button className="glow-on-hover">Sign Up!</button>
+                    </form>
+                </div>
+                
                 <label>{this.state.error}</label>
                 <Link to="/login">Already a member? Log in!</Link>
             </div>

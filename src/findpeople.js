@@ -10,22 +10,25 @@ import { render } from "react-dom";
 
 export default function Findpeople(props){
     const [newestUser, setNewestUser] = useState([]);
+
     
 
     useEffect(()=>{
-        console.log("The list of newest users rendering!")
-        axios.get("/newestUser").then((result)=>{
-            console.log("This is the last user who joined:", result);
+        console.log("The list of newest users rendering!");
+        axios.get("/getNewestUser").then((result)=>{
+            console.log("This is the last users who joined:", result.data);
             setNewestUser(result.data);
         });
-    });
+    }, []);
+
+
 
     
     return(
         <div>
-            <h1>I am rendering!</h1>
+            <h1>{newestUser}</h1>
         </div>
-    )
+    );
 
     
 

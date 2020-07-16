@@ -8,7 +8,10 @@ import Resetpassword from "./resetpassword";
 export default function Welcome() {
     return (
         <div className="divWelcome">
-            <h1>Welcome. The social network is still a work in progress. Bear with us.</h1>
+            <div className="welcomeMessage">
+                <h1>Network</h1>
+                <h2>From developers || For developers</h2>
+            </div>
             <div className="divWelcomeLogoAndRegistration">
                 <HashRouter>
                     <div>
