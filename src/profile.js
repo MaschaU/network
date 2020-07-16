@@ -50,15 +50,18 @@ export default class Profile extends React.Component {
 
     render() {
         return(
-            <div>
+            <div className="otherProfile">
                 <h1>
                     {this.state.firstName} {this.state.lastName}
                 </h1>
-                <Profilepic
+                   
+                <Profilepic className="usersProfilePic"
                     toggleModal={this.state.toggleModal}
                     setImage={this.state.setImage}
                     profilePic={this.state.profilePic}
                 />
+                 
+                    
                 <Bioeditor bio={this.state.bio} draftBio={this.state.draftBio} />
             </div>
         );

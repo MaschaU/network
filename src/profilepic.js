@@ -7,13 +7,15 @@ export default function Profilepic(props) {
     if (!props.firstName){
         return(
             <div>
+                <img className="imageOverflowed"></img>
                 <img src={props.profilePic}/>
             </div>
         );
     } else {
         return(
-            <div>
-                <img src={props.profilePic}/>
+            <div className="zoom">
+                <img className="imageOverflowed"></img>
+                <img className="usersProfilePic" src={props.profilePic}/>
                 <button onClick={props.toggleModal}>Edit your profile picture</button>
             </div>
         );

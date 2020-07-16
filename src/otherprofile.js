@@ -4,7 +4,7 @@ import axios from "./axios";
 export default class Otherprofile extends React.Component {
     constructor(props) {
         super(props);
-        console.log("OtherProfile ctor");
+        // console.log("OtherProfile ctor");
         this.state = {
             firstName: "",
             lastName: "",
@@ -13,11 +13,11 @@ export default class Otherprofile extends React.Component {
             userId: this.props.match.params.id
         };
 
-        console.log (" -- userId is ", this.state.userId);
+        // console.log (" -- userId is ", this.state.userId);
     }
     componentDidMount() {
         axios.post("/api-userinfo", {requestedUserId: this.state.userId}).then((response)=>{
-            console.log("This is the OtherProfile componentDidMount response:", response.data);
+            // console.log("This is the OtherProfile componentDidMount response:", response.data);
             if (!response.data.profilePic) {
                 response.data.profilePic = "/logo.jpg";
             }
@@ -50,11 +50,14 @@ export default class Otherprofile extends React.Component {
 
     render() {
         return(
-            <div>
+            <div className="divOtherProfile">
                 <h1>
                     {this.state.firstName} {this.state.lastName}
                 </h1>
-                <img src={this.state.profilePic}/>
+                <div className="zoom">
+                    <img className="imageOverflowed"></img>
+                    <img className="usersProfilePic" src={this.state.profilePic}/>
+                </div>
                 <p>
                     {this.state.bio}
                 </p>

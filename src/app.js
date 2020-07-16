@@ -82,12 +82,14 @@ export default class App extends React.Component {
                         )}
                         />
                         <Route path="/user/:id" component={Otherprofile}/>
+                        <Route exact path="/users" component={Findpeople}/>
                             
                     </div>   
                 </BrowserRouter>
                 
-                <Findpeople/>
+                
             </div>
         );
+        // <Findpeople/>
     }
 }

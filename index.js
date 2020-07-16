@@ -1,12 +1,15 @@
 const express = require("express");
 const app = express();
 const compression = require("compression");
-const  {Redirect} = require("react-router");
+
+// socket.io stup
+const server = require('http').Server(app);
+const io = require('socket.io')(server, { origins: 'localhost:8080'}); //mysocialnetwork.herokuapp.com:*
+
 const cookieSession = require("cookie-session");
-const db = require("./sql/db.js");
 const {hash, compare} = require("./bc.js");
 const csurf = require("csurf");
-const {getHashedPassword, getUsersEmail, insertIntoPasswordResetCodes, checkIfTheCodeIsValid, updateUsersPassword, getUserInfo, insertNewUser, storeProfilePicture, updateUsersBio, getNewestUser} = require("./sql/db.js");
+const {getHashedPassword, getUsersEmail, insertIntoPasswordResetCodes, checkIfTheCodeIsValid, updateUsersPassword, getUserInfo, insertNewUser, storeProfilePicture, updateUsersBio, getNewestUsers, getMatchingUsers} = require("./sql/db.js");
 const cryptoRandomString = require('crypto-random-string');
 const { sendEmail } = require("./ses.js");
 
@@ -109,16 +112,33 @@ app.get("/user", (req, res)=>{
     });
 });
 
-app.get("/newestUser", (req, res)=>{
-    let userId = req.session;
-    getNewestUser(userId).then((result)=>{
-        if(result) {
-            res.json(result);
+app.get("/newestUsers", (req, res)=>{
+    let userId = req.session.userId;
+    console.log("This is userId in newestUsers:", userId);
+    getNewestUsers(userId).then((result)=>{
+        if(result.rows.length > 0) {
+            res.json(result.rows);
         } else {
             res.json("Failure");
         }
     }).catch((error)=>{
-        console.log("Error in getNewestUser:", error);
+        console.log("Error in getNewestUsers:", error);
+    });
+});
+
+app.post("/getMatchingUsers", (req, res) => {
+    const { name } = req.body;
+    const { userId } = req.session;
+    console.log(name);
+    getMatchingUsers(name, userId).then((result)=>{
+        if(result){
+            console.log("Db result: ", result.rows);
+            res.json(result.rows);
+        } else {
+            res.json("Failure");
+        }
+    }).catch((error)=>{
+        console.log("Error in get matching users:", error);
     });
 });
 
@@ -300,6 +320,18 @@ app.post("/api-userinfo", (req, res)=>{
 app.listen(8080, function() {
     console.log("I'm listening.");
 });
+
+
+// SOCKET:IO SETUP //
+//change to server.listen for socket.io
+/* 
+io.on("connection", socket=>{
+    console.log(`socket with id ${socket.id} just connected`);
+    socket.on("disconnect", ()=>{
+        console.log(`socket with id ${socket.id} just disconnected`);
+    });
+});
+*/
 
 
 /*

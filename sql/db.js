@@ -83,11 +83,18 @@ module.exports.updateUsersBio = function(id, bio) {
     );
 };
 
-module.exports.getNewestUser = function() {
+module.exports.getNewestUsers = function() {
     return db.query(
         `
         SELECT id, firstname, lastname, imageurl FROM users ORDER BY id DESC LIMIT 3
         `
+    );
+};
+
+module.exports.getMatchingUsers = function(val) {
+    return db.query(
+        `SELECT id, firstname, lastname, imageurl FROM users WHERE firstname ILIKE $1 OR lastname ILIKE $1`,
+        [val + '%']
     );
 };
 
