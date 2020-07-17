@@ -8,7 +8,7 @@ const io = require('socket.io')(server, { origins: 'localhost:8080'}); //mysocia
 const cookieSession = require("cookie-session");
 const {hash, compare} = require("./bc.js");
 const csurf = require("csurf");
-const {getHashedPassword, getUsersEmail, insertIntoPasswordResetCodes, checkIfTheCodeIsValid, updateUsersPassword, getUserInfo, insertNewUser, storeProfilePicture, updateUsersBio, getNewestUsers, getMatchingUsers} = require("./sql/db.js");
+const {getHashedPassword, getUsersEmail, insertIntoPasswordResetCodes, checkIfTheCodeIsValid, updateUsersPassword, getUserInfo, insertNewUser, storeProfilePicture, updateUsersBio, getNewestUsers, getMatchingUsers, getFriendshipStatus} = require("./sql/db.js");
 const cryptoRandomString = require('crypto-random-string');
 const { sendEmail } = require("./ses.js");
 
@@ -325,6 +325,18 @@ app.post("/api-userinfo", (req, res)=>{
     });
 });
 
+app.post("getfriendshipstate/:id", (req, res)=>{
+    let userId = req.session.userId;
+    getFriendshipStatus(userId, req.params.id.slice(1)).then((result)=>{
+        if(result.rows.length == 0) {
+            res.json({friendshipState: null});
+        } else {
+            res.json(result.rows[0]);
+        }
+    }).catch((error)=>{
+        console.log("Error in getting the friendship status:", error);
+    });
+});
 
 
 

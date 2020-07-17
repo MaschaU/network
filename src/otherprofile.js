@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "./axios";
+import Friendships from "./friendships";
 
 export default class Otherprofile extends React.Component {
     constructor(props) {
@@ -61,10 +62,13 @@ export default class Otherprofile extends React.Component {
                 <p>
                     {this.state.bio}
                 </p>
+                <Friendships displayedUserId={this.state.userId} />
             </div>
         );
     }
 }
+
+
 
 
 

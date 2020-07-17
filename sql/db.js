@@ -93,8 +93,16 @@ module.exports.getNewestUsers = function() {
 
 module.exports.getMatchingUsers = function(val) {
     return db.query(
-        `SELECT id, firstname, lastname, imageurl FROM users WHERE firstname ILIKE $1 OR lastname ILIKE $1`,
-        [val + '%']
+        `SELECT id, firstname, lastname, imageurl FROM users WHERE firstname ILIKE $1 OR lastname ILIKE $1`
+        , [val + '%']
+    );
+};
+
+module.exports.getFriendshipStatus = function(loggedInUserId, otherUserId) {
+    return db.query(
+        `
+        SELECT * FROM friendships WHERE (receiverid=$1 AND senderid=$2) OR (receiverid=$2 AND senderid=$1)
+        `, [loggedInUserId, otherUserId]
     );
 };
 
@@ -102,16 +110,6 @@ module.exports.getMatchingUsers = function(val) {
 /*
 WE WILL NEED FOUR ADDITIONAL QUERIES:
 
-- a SELECT query to determine what the button should say when the component mount(before the user clicks any button)
-
-  function getInitialStatus(myId, otherId) {
-      return db.query(`
-           SELECT * FROM friendships
-           WHERE (receiver_id = $1 AND sender_id = $2)
-           OR (receiver_id = $2 AND sender_id = $1);
-           `, [ myId, otherId ]
-      )
-  }
 
   - an INSERT query that runs when user clicks "accept frien request" button is clicked. It will insert two users ids(sender and receiver)
   - an UPDATE of "accepted" column from false to true
