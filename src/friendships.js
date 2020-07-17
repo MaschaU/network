@@ -13,7 +13,7 @@ export default function Friendships(props) {
         e.preventDefault();
         if(friendshipState==null) {
             axios.post(`/makeconnectionrequest:${displayedUserId}`).then((result)=>{
-                setFriendshipState("Pending...");
+                setFriendshipState("Pending");
                 setButtonForm("Cancel");
             }).catch((error)=>{
                 console.log("Error in click handle:", error);
