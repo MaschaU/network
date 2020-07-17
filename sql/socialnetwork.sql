@@ -29,3 +29,4 @@ CREATE TABLE friendships(
   accepted BOOLEAN DEFAULT false,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+

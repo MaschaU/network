@@ -51,7 +51,7 @@ export default function Findpeople(props){
                 {
                     newestUsers.map(user=>(
                         <div key={user.id}>
-                            <p>{user.firstname} {user.lastname} {user.profilePic}</p>
+                            <p>{user.firstname} {user.lastname} <img src={user.profilePic}/></p>
                         </div>
                     ))
                 }

@@ -13,6 +13,7 @@ import Profile from "./profile";
 import Bioeditor from "./bioeditor";
 import Otherprofile from "./otherprofile";
 import Findpeople from "./findpeople";
+// import Chat from "./chat";
 
 
 
@@ -93,3 +94,6 @@ export default class App extends React.Component {
         // <Findpeople/>
     }
 }
+
+// adding a route to chat, pt10
+// <Route path="/chat" component={Chat}/>

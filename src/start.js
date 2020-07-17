@@ -4,6 +4,9 @@ import Welcome from './welcome.js';
 import Logo from "./logo";
 import App from "./app";
 
+// socket.io setup
+// import {init} from "/socket";
+
 // redux setup
 import { createStore, applyMiddleware } from 'redux';
 import {Provider} from "react-redux";
@@ -19,6 +22,9 @@ let elem;
 const userIsLoggedIn = location.pathname != "/welcome";
 
 if (userIsLoggedIn) {
+    // giving our socket.js file access to redux
+    // we want to give socket to only logged-in users
+    // init(store);
     
     elem = <App />;
     
@@ -30,5 +36,4 @@ if (userIsLoggedIn) {
 
 ReactDOM.render(elem, document.querySelector('main'));
 
-// if user is logged in, render app. else, render welcome!
 //<Provider store={store}>  </Provider>

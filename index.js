@@ -1,11 +1,10 @@
 const express = require("express");
 const app = express();
 const compression = require("compression");
-
 // socket.io stup
 const server = require('http').Server(app);
+// socket.io needs a native node server, it can't work with express
 const io = require('socket.io')(server, { origins: 'localhost:8080'}); //mysocialnetwork.herokuapp.com:*
-
 const cookieSession = require("cookie-session");
 const {hash, compare} = require("./bc.js");
 const csurf = require("csurf");
@@ -17,7 +16,6 @@ const { sendEmail } = require("./ses.js");
 // The middleware will attempt to compress response bodies for all request that traverse through the middleware, 
 // based on the given options.
 app.use(compression());
-
 
 if (process.env.NODE_ENV != "production") {
     app.use(
@@ -59,6 +57,7 @@ const uploader = multer({
 // S3
 const s3 = require("./s3.js");
 const {s3Url} = require("./config.json");
+const { decodeBase64 } = require("bcryptjs");
 
 
 // middleware
@@ -69,6 +68,18 @@ app.use(cookieSession({
     secret: `I'm always angry`,
     maxAge: 1000 * 60 * 60 * 24 * 14,
 }));
+
+// storing cookies in a variable so we can pass it on to socket.io
+// const cookieSessionMiddleware = cookieSession({
+//     secret: `I'm always angry.`,
+//     maxAge: 1000 * 60 * 60 * 24 * 90
+// });
+
+// app.use(cookieSessionMiddleware);
+// io.use(function(socket, next) {
+//     cookieSessionMiddleware(socket.request, socket.request.res, next);
+// });
+
 app.use(csurf());
 app.use(function(req, res, next) {
     res.cookie("mytoken", req.csrfToken());
@@ -320,18 +331,40 @@ app.post("/api-userinfo", (req, res)=>{
 app.listen(8080, function() {
     console.log("I'm listening.");
 });
+// changing app to server as implementing socket.io
+// server.listen(8080, function() {
+//     console.log("I'm listening.");
+// });
 
+// socket.io setup
+// io.on("connection", function(socket){
+// all of the socket.io code has to be inside of this function
+// it will not run outside of it
+// console.log(`Socket od ${socket.id} is now connected.`);
+// if the user is not logged in, disconnect from socket
+// if(!socket.request.session.userId){
+//     return socket.disconnect(true);
+// }
+// at this point, the user is logged in and successfully connected to socket
+// const userId = socket.request.session.userId;
+// here, we are fetching the last 10 messages
 
-// SOCKET:IO SETUP //
-//change to server.listen for socket.io
-/* 
-io.on("connection", socket=>{
-    console.log(`socket with id ${socket.id} just connected`);
-    socket.on("disconnect", ()=>{
-        console.log(`socket with id ${socket.id} just disconnected`);
-    });
+// getLastTenMessages().then((result)=>{
+//    console.log("This is the result:", result.rows);
+// })
+// we will need info from both users table and chats table
+// user's first, last name and image, and chat message
+// our db query will need to be a JOIN
+// once we have the chat messages, we will want to send them to the client
+// });
+/*
+socket.on("My amazing chat message", newMsg => {
+    console.log("This message is coming from chat.js component:", newMsg);
 });
 */
+
+
+
 
 
 /*
