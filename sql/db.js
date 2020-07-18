@@ -106,20 +106,28 @@ module.exports.getFriendshipStatus = function(loggedInUserId, otherUserId) {
     );
 };
 
+module.exports.insertFriendRequest = function(loggedInUserId, otherUserId) {
+    return db.query(
+        `
+        INSERT INTO friendships (senderid, receiverid)
+        VALUES ($1, $2) RETURNING id
+        `, [loggedInUserId, otherUserId]
+    );
+};
 
-/*
-WE WILL NEED FOUR ADDITIONAL QUERIES:
+module.exports.updateFriendshipToAccepted = function(loggedInUserId, otherUserId) {
+    return db.query(
+        `
+        UPDATE friendships SET accepted=true WHERE senderid=$2 AND receiverid=$1
+        `, [loggedInUserId, otherUserId]
+    );
+};
 
+module.exports.deleteFriendship = function(loggedInUserId, otherUserId) {
+    return db.query(
+        `
+        DELETE from friendships WHERE (senderid=$1 and receiverid=$2) OR (senderid=$2 and receiverid=$1) 
+        `, [loggedInUserId, otherUserId]
+    );
+};
 
-  - an INSERT query that runs when user clicks "accept frien request" button is clicked. It will insert two users ids(sender and receiver)
-  - an UPDATE of "accepted" column from false to true
-  - DELETE that runs when friend request is canceled or "end froiendship" is clicked
-*/
-
-
-
-/*DATABASE QUERIES FOR PART 3
-SELECT to find user by email (reuse query from Login)
-INSERT into the new table for secret codes
-SELECT that finds code in the new table that matches the email address AND is less than 10 minutes old
-UPDATE password of user's table by email address*/

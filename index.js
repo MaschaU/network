@@ -8,7 +8,7 @@ const compression = require("compression");
 const cookieSession = require("cookie-session");
 const {hash, compare} = require("./bc.js");
 const csurf = require("csurf");
-const {getHashedPassword, getUsersEmail, insertIntoPasswordResetCodes, checkIfTheCodeIsValid, updateUsersPassword, getUserInfo, insertNewUser, storeProfilePicture, updateUsersBio, getNewestUsers, getMatchingUsers, getFriendshipStatus} = require("./sql/db.js");
+const {getHashedPassword, getUsersEmail, insertIntoPasswordResetCodes, checkIfTheCodeIsValid, updateUsersPassword, getUserInfo, insertNewUser, storeProfilePicture, updateUsersBio, getNewestUsers, getMatchingUsers, getFriendshipStatus, insertFriendRequest, updateFriendshipToAccepted, deleteFriendship} = require("./sql/db.js");
 const cryptoRandomString = require('crypto-random-string');
 const { sendEmail } = require("./ses.js");
 
@@ -335,26 +335,42 @@ app.post("/getfriendshipstate", (req, res)=>{
             // console.log("result.rows.length in getfriendshipstate:", result.rows.length);
             res.json({friendshipState: "NullState"});
         } else if (result.rows[0].accepted == true) {
-            res.json({friendshipState: otherUserAcceptsRequest})
-        } else if (this user has asked other user)
-        {
-            // return value indicating this user has asked other user
-        }
-        else if (other user has asked this user)
-        {
-            // return value indicating logged on user has a request from displazed user
-        }else {
-            // throw an error because we should never get here
-        }
-
-            
-            res.json(result.rows[0]);
+            res.json({friendshipState: "friends"});
+        } else if (userId==result.rows[0].senderid) {
+            console.log("loggedInUserSendingRequest");
+            res.json({friendshipState: "loggedInUserSendingRequest"});
+        } else {
+            res.json({friendshipState: "otherUserSendingRequest"});
         }
     }).catch((error)=>{
         console.log("Error in getting the friendship status:", error);
     });
 });
 
+app.post("/makeconnectionrequest", (req, res)=>{
+    let loggedInUserId= req.session.userId;
+    let otherUserId= req.body.secondUserId;
+    insertFriendRequest(loggedInUserId, otherUserId).then((result)=>{
+        console.log("I am not nuked");
+    });
+});
+
+
+app.post("/loggedInUserAccepts", (req,res) => {
+    let loggedInUserId= req.session.userId;
+    let otherUserId= req.body.secondUserId;
+    updateFriendshipToAccepted(loggedInUserId, otherUserId).then((result)=>{
+        console.log("I acccept that I may or may not be nuked");
+    });
+});
+
+app.post("/cancelFriendship", (req, res)=>{
+    let loggedInUserId= req.session.userId;
+    let otherUserId= req.body.secondUserId;
+    deleteFriendship(loggedInUserId, otherUserId).then((result)=>{
+        console.log("Please, don't be nuked");
+    });
+});
 
 
 app.listen(8080, function() {
