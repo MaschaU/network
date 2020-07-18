@@ -2,9 +2,9 @@ const express = require("express");
 const app = express();
 const compression = require("compression");
 // socket.io stup
-const server = require('http').Server(app);
+// const server = require('http').Server(app);
 // socket.io needs a native node server, it can't work with express
-const io = require('socket.io')(server, { origins: 'localhost:8080'}); //mysocialnetwork.herokuapp.com:*
+// const io = require('socket.io')(server, { origins: 'localhost:8080'}); //mysocialnetwork.herokuapp.com:*
 const cookieSession = require("cookie-session");
 const {hash, compare} = require("./bc.js");
 const csurf = require("csurf");
@@ -325,12 +325,29 @@ app.post("/api-userinfo", (req, res)=>{
     });
 });
 
-app.post("getfriendshipstate/:id", (req, res)=>{
+app.post("/getfriendshipstate", (req, res)=>{
     let userId = req.session.userId;
-    getFriendshipStatus(userId, req.params.id.slice(1)).then((result)=>{
+    let secondUserId = req.body.displayedUserId;
+    // console.log("This is the userId:", userId);
+    // console.log("This is the second user ID:", secondUserId);
+    getFriendshipStatus(userId, secondUserId).then((result)=>{
         if(result.rows.length == 0) {
-            res.json({friendshipState: null});
-        } else {
+            // console.log("result.rows.length in getfriendshipstate:", result.rows.length);
+            res.json({friendshipState: "NullState"});
+        } else if (result.rows[0].accepted == true) {
+            res.json({friendshipState: otherUserAcceptsRequest})
+        } else if (this user has asked other user)
+        {
+            // return value indicating this user has asked other user
+        }
+        else if (other user has asked this user)
+        {
+            // return value indicating logged on user has a request from displazed user
+        }else {
+            // throw an error because we should never get here
+        }
+
+            
             res.json(result.rows[0]);
         }
     }).catch((error)=>{
