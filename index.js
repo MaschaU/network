@@ -8,7 +8,7 @@ const compression = require("compression");
 const cookieSession = require("cookie-session");
 const {hash, compare} = require("./bc.js");
 const csurf = require("csurf");
-const {getHashedPassword, getUsersEmail, insertIntoPasswordResetCodes, checkIfTheCodeIsValid, updateUsersPassword, getUserInfo, insertNewUser, storeProfilePicture, updateUsersBio, getNewestUsers, getMatchingUsers, getFriendshipStatus, insertFriendRequest, updateFriendshipToAccepted, deleteFriendship} = require("./sql/db.js");
+const {getHashedPassword, getUsersEmail, insertIntoPasswordResetCodes, checkIfTheCodeIsValid, updateUsersPassword, getUserInfo, insertNewUser, storeProfilePicture, updateUsersBio, getNewestUsers, getMatchingUsers, getFriendshipStatus, insertFriendRequest, updateFriendshipToAccepted, deleteFriendship, getFriendships} = require("./sql/db.js");
 const cryptoRandomString = require('crypto-random-string');
 const { sendEmail } = require("./ses.js");
 
@@ -110,6 +110,7 @@ app.get("/user", (req, res)=>{
             const rowReturned = result.rows[0];
             // console.log("This is the first name:", rowReturned.firstname);
             res.json({ 
+                userId: rowReturned.id,
                 firstName: rowReturned.firstname,
                 lastName: rowReturned.lastname,
                 profilePic: rowReturned.imageurl,
@@ -135,6 +136,15 @@ app.get("/newestUsers", (req, res)=>{
     }).catch((error)=>{
         console.log("Error in getNewestUsers:", error);
     });
+});
+
+app.get("/getListOfFriendships", (req, res)=>{
+    let userId = req.session.userId;
+    getFriendships(userId).then((result)=>{
+        res.json(result.rows);
+    }).catch((error)=>{
+        console.log("Error in returning the list of friendships:", error);
+    }); 
 });
 
 app.post("/getMatchingUsers", (req, res) => {
@@ -361,6 +371,7 @@ app.post("/loggedInUserAccepts", (req,res) => {
     let otherUserId= req.body.secondUserId;
     updateFriendshipToAccepted(loggedInUserId, otherUserId).then((result)=>{
         console.log("I acccept that I may or may not be nuked");
+        res.json("For great justice! Launch every Zig!");
     });
 });
 
@@ -368,7 +379,10 @@ app.post("/cancelFriendship", (req, res)=>{
     let loggedInUserId= req.session.userId;
     let otherUserId= req.body.secondUserId;
     deleteFriendship(loggedInUserId, otherUserId).then((result)=>{
+        res.json("Success");
         console.log("Please, don't be nuked");
+    }).catch((error)=>{
+        console.log("Error in deleting request:", error);
     });
 });
 

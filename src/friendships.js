@@ -28,7 +28,7 @@ export default function Friendships(props) {
         } else if (friendshipState=="otherUserSendingRequest") {
             axios.post("/loggedInUserAccepts", {secondUserId: displayedUserId}).then((result)=>{
                 setFriendshipState("friends");
-                setButtonForm("Disconnect");
+                setButtonForm("End Connection");
             });
         } else if (friendshipState=="friends") {
             axios.post("/cancelFriendship", {secondUserId: displayedUserId}).then((result)=>{
@@ -52,7 +52,7 @@ export default function Friendships(props) {
             } else if (result.data.friendshipState=="otherUserSendingRequest") {
                 setButtonForm("Accept");
             } else if (result.data.friendshipState=="friends") {
-                setButtonForm("Disconnect");
+                setButtonForm("End Connection");
             }
         });
     }

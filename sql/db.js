@@ -131,5 +131,11 @@ module.exports.deleteFriendship = function(loggedInUserId, otherUserId) {
     );
 };
 
-
+module.exports.getFriendships = function (loggedInUserId) {
+    return db.query(
+        `
+        SELECT * from friendships WHERE ((senderid=$1 OR receiverid=$1) AND accepted = true) OR ((receiverid=$1) AND accepted = false)
+        `, [loggedInUserId]
+    );
+};
 
