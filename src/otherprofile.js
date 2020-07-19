@@ -62,7 +62,7 @@ export default class Otherprofile extends React.Component {
                 <p>
                     {this.state.bio}
                 </p>
-                <Friendships displayedUserId={this.state.userId} />
+                <Friendships displayedUserId={this.state.userId} rerender={() => {this.setState({});}} />
             </div>
         );
     }

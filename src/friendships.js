@@ -8,19 +8,20 @@ export default function Friendships(props) {
     // to tell us the id of the user whose profile the logged in user is visiting
     const [displayedUserId, setDisplayedUserId] = useState(props.displayedUserId);
     // to tell us which button to display to the user
-    const [buttonForm, setButtonForm] = useState(props.buttonForm);
+    const [buttonForm, setButtonForm] = useState("");
 
     function handleClick(e){
         e.preventDefault();
         if(friendshipState=="NullState") {
             axios.post("/makeconnectionrequest", {secondUserId: displayedUserId}).then((result)=>{
+                console.log("Result of connection request:", result);
                 setFriendshipState("Pending");
                 setButtonForm("Connect");
             }).catch((error)=>{
                 console.log("Error in click handle:", error);
             });
         } else if (friendshipState=="loggedInUserSendingRequest") {
-            axios.post("/l---cancel-request-fcuntoin---", {secondUserId: displayedUserId}).then((result)=>{
+            axios.post("/cancelFriendship", {secondUserId: displayedUserId}).then((result)=>{
                 setFriendshipState("loggedInUserSendingRequest");
                 setButtonForm("Cancel");
             });
@@ -33,10 +34,11 @@ export default function Friendships(props) {
             axios.post("/cancelFriendship", {secondUserId: displayedUserId}).then((result)=>{
                 setFriendshipState("NullState");
                 setButtonForm("Connect");
-            })
+            });
             // make server call that cancels friendship
             // note that we don't know who was the sender and receiver, so delete both cases
         }
+        //props.rerender();
     }
 
     function getFriendshipstate(e) {
@@ -56,9 +58,10 @@ export default function Friendships(props) {
     }
 
     useEffect(()=>{
+        console.log("useEffect is running");
         getFriendshipstate();
         console.log("This is the result of getting friendship state:");
-    }, []);
+    }, [buttonForm]);
 
 
 
