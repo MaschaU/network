@@ -39,9 +39,5 @@ CREATE TABLE chat (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO chat (message, sender_id)
-VALUES 
-("Hello", 1),
-("Hello to you too", 2),
-("Hello again", 2);
+
 

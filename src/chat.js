@@ -1,54 +1,83 @@
 
-import React, {useEffect, useRef} from "react";
+import React from "react";
 import {socket} from "./socket";
+import Messages from "./messages";
+import cryptoRandomString from "crypto-random-string";
 //import {useSelector} from "react-router";
 
-export default function Chat(){
-    console.log("Line 7");
-    const elemRef = useRef();
-    // fetching messages from the global state, go redux!
-    /*
-    const chatMessages = useSelector((state)=>{
-        console.log("Line 11");
-        return state.chatMessages;
-    });*/
-    const chatMessages=[];
-    // this will be undefined on first render (unless we hard code some messages)
-    console.log("Line 14");
+export default class Chat extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            currentChatDisplay: []
+        };
 
-    // useEffect- equivalent to componentDidMount
-    useEffect(()=>{
+        const chatWindowMaxLength = 10;
+
+        this.keyCheck = this.keyCheck.bind(this);
+        this.chatWindowRef = React.createRef();
+
+        // Bind socket to chat update function
+
+        socket.on('chatMessage',
+            message => {
+
+                // Add new message to display
+
+                var newDisplay = this.state.currentChatDisplay;
+                newDisplay.push ({messageBody: message});
+
+                // Crop display at a maximum message count
+
+                if (newDisplay.length > chatWindowMaxLength) {
+                    newDisplay = newDisplay.slice(-chatWindowMaxLength);
+                }
+
+                // Set state forcing re-render of modified display
+
+                this.setState(
+                    { currentChatDisplay: newDisplay }
+                );
+            }
+        );
+
+        // console.log (" -- userId is ", this.state.userId);
+    }
+
+    componentDidMount() {
         console.log("Line 21");
-        let clientHeight = elemRef.current.clientHeight;
-        let scrollHeight = elemRef.current.scrollHeight;
+        var clientHeight = this.chatWindowRef.current.clientHeight;
+        var scrollHeight = this.chatWindowRef.current.scrollHeight;
 
-        elemRef.current.scrollTop = scrollHeight - clientHeight;
-        // run this function every time you get a new chat message
-    }, [chatMessages]);
+        this.chatWindowRef.current.scrollTop = scrollHeight - clientHeight;
+    }
 
-    const keyCheck = e =>{
-        console.log("This is the value:", e.target.value);
-        console.log("Key pressed is:", e.key);
-        
+
+
+    keyCheck (e) {
         if(e.key === "Enter") {
             e.preventDefault(); // preventing jumping to new line on enter
-            console.log("Our message:", e.target.value);
             socket.emit("chatMessage", e.target.value);
             e.target.value = "";
         }
-    };
+    }
 
-    
-    console.log("Line 42");
-    return(
-        <div>
-            <p className="something">Chat away!</p>
-            <div className="chatMessagesContainer" ref={elemRef}>
-                <p>Chat messages will go here:</p>
-                <textarea placeholder="add your message" onKeyDown={keyCheck}></textarea>
+    render() {
+        return(
+            <div>
+                <div className="chatMessagesContainer" ref={this.chatWindowRef}>
+                    {this.state.currentChatDisplay.map(row=>{
+                        return (<Messages messageBody={row.messageBody} key={cryptoRandomString({length: 6})}/>);
+                    })}
+                    <p>Type something for your wonderful audience:</p>
+                    <textarea placeholder="add your message" onKeyDown={this.keyCheck}></textarea>
+                    <div className="chatDiv">
+                        <div className="divSingleChat"></div>
+                    </div>
+                </div>
             </div>
-        </div>
-    );
+        );
+    }
 }
 
 // onKeyDown- event listener

@@ -88,6 +88,7 @@ export default class App extends React.Component {
                         <Route exact path="/users" component={Findpeople}/>
                         <Route exact path="/listfriendships" component={Listfriendships}/>
                         <Route exact path="/chat" component={Chat}/>
+                        <Route exact path="/findpeople" component={Findpeople}/>
                             
                     </div>   
                 </BrowserRouter>

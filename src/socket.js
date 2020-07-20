@@ -12,8 +12,6 @@ export const init = () => {
         )
     );*/
 
-    socket.on('chatMessage',
-        message => { alert(message);});
 
 };
 
