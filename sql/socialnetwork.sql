@@ -30,3 +30,18 @@ CREATE TABLE friendships(
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+DROP TABLE IF EXISTS chat;
+
+CREATE TABLE chat (
+  id SERIAL PRIMARY KEY,
+  message TEXT NOT NULL,
+  sender_id INT NOT NULL REFERENCES tblusers(id),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+INSERT INTO chat (message, sender_id)
+VALUES 
+("Hello", 1),
+("Hello to you too", 2),
+("Hello again", 2);
+

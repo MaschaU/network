@@ -2,9 +2,9 @@ const express = require("express");
 const app = express();
 const compression = require("compression");
 // socket.io stup
-// const server = require('http').Server(app);
+const server = require('http').Server(app);
 // socket.io needs a native node server, it can't work with express
-// const io = require('socket.io')(server, { origins: 'localhost:8080'}); //mysocialnetwork.herokuapp.com:*
+const io = require('socket.io')(server, { origins: 'localhost:8080'}); //mysocialnetwork.herokuapp.com:*
 const cookieSession = require("cookie-session");
 const {hash, compare} = require("./bc.js");
 const csurf = require("csurf");
@@ -70,15 +70,15 @@ app.use(cookieSession({
 }));
 
 // storing cookies in a variable so we can pass it on to socket.io
-// const cookieSessionMiddleware = cookieSession({
-//     secret: `I'm always angry.`,
-//     maxAge: 1000 * 60 * 60 * 24 * 90
-// });
+const cookieSessionMiddleware = cookieSession({
+    secret: `I'm always angry.`,
+    maxAge: 1000 * 60 * 60 * 24 * 90
+});
 
-// app.use(cookieSessionMiddleware);
-// io.use(function(socket, next) {
-//     cookieSessionMiddleware(socket.request, socket.request.res, next);
-// });
+app.use(cookieSessionMiddleware);
+io.use(function(socket, next) {
+    cookieSessionMiddleware(socket.request, socket.request.res, next);
+});
 
 app.use(csurf());
 app.use(function(req, res, next) {
@@ -147,21 +147,6 @@ app.get("/getListOfFriendships", (req, res)=>{
     }); 
 });
 
-app.post("/getMatchingUsers", (req, res) => {
-    const { name } = req.body;
-    const { userId } = req.session;
-    console.log(name);
-    getMatchingUsers(name, userId).then((result)=>{
-        if(result){
-            console.log("Db result: ", result.rows);
-            res.json(result.rows);
-        } else {
-            res.json("Failure");
-        }
-    }).catch((error)=>{
-        console.log("Error in get matching users:", error);
-    });
-});
 
 // all the other routes need to be above *
 // if the user inputs gibberish url, the * will be served
@@ -335,6 +320,22 @@ app.post("/api-userinfo", (req, res)=>{
     });
 });
 
+app.post("/getMatchingUsers", (req, res) => {
+    const { name } = req.body;
+    const { userId } = req.session;
+    console.log(name);
+    getMatchingUsers(name, userId).then((result)=>{
+        if(result){
+            console.log("Db result: ", result.rows);
+            res.json(result.rows);
+        } else {
+            res.json("Failure");
+        }
+    }).catch((error)=>{
+        console.log("Error in get matching users:", error);
+    });
+});
+
 app.post("/getfriendshipstate", (req, res)=>{
     let userId = req.session.userId;
     let secondUserId = req.body.displayedUserId;
@@ -361,6 +362,7 @@ app.post("/makeconnectionrequest", (req, res)=>{
     let loggedInUserId= req.session.userId;
     let otherUserId= req.body.secondUserId;
     insertFriendRequest(loggedInUserId, otherUserId).then((result)=>{
+        res.json("Success");
         console.log("I am not nuked");
     });
 });
@@ -386,13 +388,13 @@ app.post("/cancelFriendship", (req, res)=>{
     });
 });
 
-app.listen(8080, function() {
-    console.log("I'm listening.");
-});
-// changing app to server as implementing socket.io
-// server.listen(8080, function() {
+// app.listen(8080, function() {
 //     console.log("I'm listening.");
 // });
+// changing app to server as implementing socket.io
+server.listen(8080, function() {
+    console.log("I'm listening.");
+});
 
 // socket.io setup
 // io.on("connection", function(socket){
@@ -415,21 +417,23 @@ app.listen(8080, function() {
 // our db query will need to be a JOIN
 // once we have the chat messages, we will want to send them to the client
 // });
-/*
-socket.on("My amazing chat message", newMsg => {
-    console.log("This message is coming from chat.js component:", newMsg);
+
+io.on("connection", function(socket){
+
+    if(!socket.request.session.userId){
+        return socket.disconnect(true); // we're being a little harsh if somebody's probing us
+    }
+
+    socket.on("chatMessage", newMsg => {
+        console.log("This message is coming from chat.js component:", newMsg);
+        io.sockets.emit("chatMessage", newMsg);
+    });
 });
-*/
 
 
 
 
 
-/*
 
-FOR FRIENDSHIPS FEATURE we need a four server routes:
-- GET /getinitialstatus/:id
-- POST /makefriendrequest/:id
-- POST /acceptfriendrequest/:id
-- POST /endfrienship/:id
-*/
+
+

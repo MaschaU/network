@@ -14,7 +14,8 @@ import Bioeditor from "./bioeditor";
 import Otherprofile from "./otherprofile";
 import Findpeople from "./findpeople";
 import Listfriendships from "./listfriendships"; 
-// import Chat from "./chat";
+import Chat from "./chat";
+
 
 
 
@@ -86,6 +87,7 @@ export default class App extends React.Component {
                         <Route path="/user/:id" component={Otherprofile}/>
                         <Route exact path="/users" component={Findpeople}/>
                         <Route exact path="/listfriendships" component={Listfriendships}/>
+                        <Route exact path="/chat" component={Chat}/>
                             
                     </div>   
                 </BrowserRouter>

@@ -5,7 +5,7 @@ import Logo from "./logo";
 import App from "./app";
 
 // socket.io setup
-// import {init} from "/socket";
+import { init, socket } from "./socket";
 
 // redux setup
 import { createStore, applyMiddleware } from 'redux';
@@ -25,6 +25,7 @@ if (userIsLoggedIn) {
     // giving our socket.js file access to redux
     // we want to give socket to only logged-in users
     // init(store);
+    init(); // socket.init
     
     elem = <App />;
     
