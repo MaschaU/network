@@ -34,8 +34,8 @@ DROP TABLE IF EXISTS chat;
 
 CREATE TABLE chat (
   id SERIAL PRIMARY KEY,
-  message TEXT NOT NULL,
-  sender_id INT NOT NULL REFERENCES tblusers(id),
+  messagebody TEXT NOT NULL,
+  senderid INT NOT NULL REFERENCES users(id),
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

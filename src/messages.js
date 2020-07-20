@@ -16,7 +16,7 @@ export default class Messages extends React.Component {
     render() {
         return(
             <div>
-                <p className="chat-message">Message: {this.state.message}</p>
+                <p className="chat-message"><span className="chat-message-sender">{this.state.firstName} {this.state.lastName}</span>: {this.state.message}</p>
             </div>
         );
     }

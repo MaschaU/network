@@ -8,7 +8,9 @@ const io = require('socket.io')(server, { origins: 'localhost:8080'}); //mysocia
 const cookieSession = require("cookie-session");
 const {hash, compare} = require("./bc.js");
 const csurf = require("csurf");
-const {getHashedPassword, getUsersEmail, insertIntoPasswordResetCodes, checkIfTheCodeIsValid, updateUsersPassword, getUserInfo, insertNewUser, storeProfilePicture, updateUsersBio, getNewestUsers, getMatchingUsers, getFriendshipStatus, insertFriendRequest, updateFriendshipToAccepted, deleteFriendship, getFriendships} = require("./sql/db.js");
+const {getHashedPassword, getUsersEmail, insertIntoPasswordResetCodes, checkIfTheCodeIsValid, updateUsersPassword, 
+    getUserInfo, insertNewUser, storeProfilePicture, updateUsersBio, getNewestUsers, getMatchingUsers, getFriendshipStatus, 
+    insertFriendRequest, updateFriendshipToAccepted, deleteFriendship, getFriendships, insertChatMessage, getRecentChatMessages} = require("./sql/db.js");
 const cryptoRandomString = require('crypto-random-string');
 const { sendEmail } = require("./ses.js");
 
@@ -146,6 +148,38 @@ app.get("/getListOfFriendships", (req, res)=>{
         console.log("Error in returning the list of friendships:", error);
     }); 
 });
+
+app.get("/getRecentChatMessages", (req, res)=>{
+    let userId = req.session.userId;
+    if (userId == undefined || userId == null || userId == 0){
+        res.json ({success: true}); // decoy for hack attempts against server
+    }
+    let userEnrichedMessageArray = [];
+    getRecentChatMessages(10).then(async function (messageInfo) {
+        // we're looping through the database messages; looking up the user id for each of them,
+        // and adding the composite object to user-enriched message array
+        // then returning this to the client
+        for (let index = 0; index < messageInfo.rows.length; index++){
+            let promise = getUserInfo(messageInfo.rows[index].senderid).then (userInfo => {
+                userEnrichedMessageArray.push({
+                    firstName: userInfo.rows[0].firstname,
+                    lastName: userInfo.rows[0].lastname,
+                    profilePic: userInfo.rows[0].imageurl,
+                    chatRowId: messageInfo.rows[index].id,
+                    timeStamp: messageInfo.rows[index].created_at,
+                    messageBody: messageInfo.rows[index].messagebody
+                });
+            });
+            // making sure promise completes before next iteration, otherwise
+            // res.json in .finally() will return result before lookups are complete
+            await promise; 
+        }
+    }).finally(() => {
+        res.json ({recentMessages: userEnrichedMessageArray});
+    });
+
+});
+
 
 
 // all the other routes need to be above *
@@ -388,6 +422,7 @@ app.post("/cancelFriendship", (req, res)=>{
     });
 });
 
+
 // app.listen(8080, function() {
 //     console.log("I'm listening.");
 // });
@@ -396,37 +431,34 @@ server.listen(8080, function() {
     console.log("I'm listening.");
 });
 
-// socket.io setup
-// io.on("connection", function(socket){
-// all of the socket.io code has to be inside of this function
-// it will not run outside of it
-// console.log(`Socket od ${socket.id} is now connected.`);
-// if the user is not logged in, disconnect from socket
-// if(!socket.request.session.userId){
-//     return socket.disconnect(true);
-// }
-// at this point, the user is logged in and successfully connected to socket
-// const userId = socket.request.session.userId;
-// here, we are fetching the last 10 messages
-
-// getLastTenMessages().then((result)=>{
-//    console.log("This is the result:", result.rows);
-// })
-// we will need info from both users table and chats table
-// user's first, last name and image, and chat message
-// our db query will need to be a JOIN
-// once we have the chat messages, we will want to send them to the client
-// });
-
 io.on("connection", function(socket){
 
     if(!socket.request.session.userId){
         return socket.disconnect(true); // we're being a little harsh if somebody's probing us
     }
+    let currentUserId = socket.request.session.userId;
+    // console.log ("Socket has connected userId", currentUserId);
 
-    socket.on("chatMessage", newMsg => {
-        console.log("This message is coming from chat.js component:", newMsg);
-        io.sockets.emit("chatMessage", newMsg);
+    socket.on("clientChatMessage", newClientMessage => {
+        // We have a new message, so we need to look up from whom
+        console.log ("Message from userId", currentUserId);
+        insertChatMessage(currentUserId, newClientMessage);
+        getUserInfo(currentUserId).then((result) => {
+            console.log (" -- ", result.rows[0].firstname + " " + result.rows[0].lastname);
+            let newMessageObject = {
+                userId: result.rows[0].id,
+                firstName: result.rows[0].firstname,
+                lastName: result.rows[0].lastname,
+                profilePic: result.rows[0].imageurl,
+                chatRowId: null,
+                timeStamp: null,
+                messageBody: newClientMessage
+            };
+
+            io.sockets.emit("serverChatMessage", newMessageObject);
+        });
+
+        
     });
 });
 

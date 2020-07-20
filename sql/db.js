@@ -139,3 +139,18 @@ module.exports.getFriendships = function (loggedInUserId) {
     );
 };
 
+module.exports.insertChatMessage = function (senderId, messageBody) {
+    return db.query(
+        `
+        INSERT INTO chat (senderid,messagebody) VALUES ($1,$2) RETURNING id
+        `, [senderId, messageBody]
+    );
+};
+
+module.exports.getRecentChatMessages = function(maxCount) {
+    return db.query(
+        `
+        SELECT * FROM chat ORDER BY id DESC LIMIT $1
+        `, [ maxCount ]
+    );
+};
