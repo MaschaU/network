@@ -45,6 +45,7 @@ export default class Listfriendships extends React.Component {
                 
                 return(
                     <Displayonerelationship key={otherUserId} userId={otherUserId } accepted={row.accepted} />
+            
                 );
             })
         );

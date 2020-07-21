@@ -93,9 +93,9 @@ export default class App extends React.Component {
                     </div>   
                 </BrowserRouter>
                 <div className="paths-from-profile">
-                    <a href="/findpeople">Find other users!</a>
-                    <a href="/chat">Chat with other users!</a>
-                    <a href="listfriendships">Check your connections!</a>
+                    <a className="path1" href="/findpeople">Find other users!</a>
+                    <a className="path2" href="/chat">Chat with other users!</a>
+                    <a className="path3" href="/listfriendships">Check your connections!</a>
                 </div>
                 
                 

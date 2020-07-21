@@ -62,14 +62,17 @@ export default class Displayonerelationship extends React.Component {
 
         return(
             <div>
-                <p>{this.state.lastName}</p>
                 <p>{this.state.firstName}</p>
-                <p>{this.state.profilePic}</p>
+                <p>{this.state.lastName}</p>
+                <img src={this.state.profilePic}/>
                 {console.log("This is this.state.accepted:", this.state.accepted)};
-                {this.state.accepted? 
-                    <button className="glow-on-hover" onClick={(e) => this.handleClickTerminate(e)}>End Connection</button> :
-                    <button className="glow-on-hover" onClick={(e) => this.handleClickAccept(e)}>Accept</button>
-                }
+                <div className="connections-div">
+                    {this.state.accepted? 
+                        <button className="glow-on-hover" onClick={(e) => this.handleClickTerminate(e)}>Disconnect</button> :
+                        <button className="glow-on-hover" onClick={(e) => this.handleClickAccept(e)}>Accept</button>
+                    }
+                </div>
+                <p></p>
  
             </div>
         );

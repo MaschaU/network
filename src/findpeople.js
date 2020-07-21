@@ -51,7 +51,7 @@ export default function Findpeople(props){
                 {
                     newestUsers.map(user=>(
                         <div className="users-profile-text" key={user.id}>
-                            <img src={user.imageurl}/>
+                            <a href={"user/" + user.id}><img src={user.imageurl}/></a>
                             <p className="users-profile-text">{user.firstname} {user.lastname}</p>
                         </div>
                     ))
@@ -68,7 +68,7 @@ export default function Findpeople(props){
                     patternUsers.map(user=>(
                         <div key={user.id}>
                             <p>{user.firstname} {user.lastname}</p>
-                            <img src={user.imageurl}/>
+                            <a href={"user/" + user.id}><img src={user.imageurl}/></a>
                         </div>
                     ))
                 }

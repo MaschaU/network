@@ -77,7 +77,8 @@ img {
     cursor: pointer;
     text-align: center;
     margin-top: 70px;
-    margin-left: 33%;
+    margin-left: auto;
+    margin-right: auto;
     
 }
 .zoom:hover {
@@ -141,15 +142,21 @@ button {
     transition: all 0.5s;
     cursor: pointer;
 }
+.path1, .path2, .path3 {
+    margin-left: 50px;
+}
 
 .button-uploadpic-profile {
     margin-top: 10px;
 }
 .paths-from-profile {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    right:10px;
+    width:50%;
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    justify-content: flex-end;
     text-align: center;
-    margin-top: 90px;
 
 }
 
@@ -161,6 +168,14 @@ button {
 
 .users-profile-text {
     margin: 10px;
+}
+.chatMessagesContainer{
+    margin-left: auto;
+    margin-right: auto;
+    height: 500px;
+    width: 80%;
+    
+
 }
 
 .glow-on-hover {
