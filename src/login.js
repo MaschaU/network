@@ -39,8 +39,8 @@ export default class Login extends React.Component {
                 <img src="./logo.png"></img>
     
                 <form onSubmit={this.handleSubmit}>
-                    <input type="text" name="email" onChange={this.handleChange} placeholder="Email" />
-                    <input type="text" name="password" onChange={this.handleChange} placeholder="Password" />
+                    <input type="text" name="email" onChange={this.handleChange} placeholder="Email" required/>
+                    <input type="password" name="password" onChange={this.handleChange} placeholder="Password" required />
                     <button className="glow-on-hover">Login</button>
                 </form>
                 <label>{this.state.error}</label>

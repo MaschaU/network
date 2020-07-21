@@ -46,12 +46,13 @@ export default function Findpeople(props){
 
     if(namePattern.length <= 0){
         return(
-            <div>
+            <div className="find-users-grid">
                 {console.log("In Render: ", newestUsers)}
                 {
                     newestUsers.map(user=>(
-                        <div key={user.id}>
-                            <p>{user.firstname} {user.lastname} <img src={user.profilePic}/></p>
+                        <div className="users-profile-text" key={user.id}>
+                            <img src={user.imageurl}/>
+                            <p className="users-profile-text">{user.firstname} {user.lastname}</p>
                         </div>
                     ))
                 }
@@ -66,7 +67,8 @@ export default function Findpeople(props){
                 {
                     patternUsers.map(user=>(
                         <div key={user.id}>
-                            <p>{user.firstname} {user.lastname} <img src={user.imageurl}/></p>
+                            <p>{user.firstname} {user.lastname}</p>
+                            <img src={user.imageurl}/>
                         </div>
                     ))
                 }

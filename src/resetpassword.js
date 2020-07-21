@@ -102,9 +102,9 @@ export default class Resetpassword extends React.Component {
                 <div>
                     <p>The email should be in your inbox.</p>
                     <p>Type in the code we&apos;ve sent you, confirm your new password and you&apos;re good to go </p>
-                    <input type="text" name="code" value={this.state.code} onChange={this.handleChange} placeholder="code" />
-                    <input type="text" name="password" onChange={this.handleChange} placeholder="Password" />
-                    <input type="text" name="repeatedPassword" onChange={this.handleChange} placeholder="Re-type your Password" />
+                    <input type="text" name="code" value={this.state.code} onChange={this.handleChange} placeholder="code" required />
+                    <input type="password" name="password" onChange={this.handleChange} placeholder="Password" required />
+                    <input type="password" name="repeatedPassword" onChange={this.handleChange} placeholder="Re-type your Password" required/>
                     <button onClick={this.handleSubmitCode}>Submit!</button>
                 </div>
             );
