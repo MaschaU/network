@@ -142,6 +142,17 @@ button {
     cursor: pointer;
 }
 
+.button-uploadpic-profile {
+    margin-top: 10px;
+}
+ .paths-from-profile {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    text-align: center;
+    margin-top: 90px;
+
+ }
+
 .glow-on-hover {
     width: 120px;
     height: 38px;
@@ -154,6 +165,7 @@ button {
     z-index: 0;
     border-radius: 10px;
     font-size: 16px;
+    margin: 10px;
 }
 
 .glow-on-hover:before {

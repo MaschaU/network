@@ -78,9 +78,9 @@ export default class App extends React.Component {
                         <Route exact path="/" render={()=>(
                             <div>
                                 <Profile overrideProfilePic={this.state.profilePic}/>
-                                <button onClick={this.toggleModal}>Set your photo</button>
+                                <button className="glow-on-hover" onClick={this.toggleModal}>Set photo</button>
                                 {uploadConditionalTemplate}
-                                <Bioeditor bio={bio} />
+                              
                             </div>
                         )}
                         />
@@ -92,6 +92,11 @@ export default class App extends React.Component {
                             
                     </div>   
                 </BrowserRouter>
+                <div className="paths-from-profile">
+                    <a href="/findpeople">Find other users!</a>
+                    <a href="/chat">Chat with other users!</a>
+                    <a href="listfriendships">Check your connections!</a>
+                </div>
                 
                 
             </div>

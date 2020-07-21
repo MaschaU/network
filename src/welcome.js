@@ -10,7 +10,7 @@ export default function Welcome() {
         <div className="divWelcome">
             <div className="welcomeMessage">
                 <h1>Network</h1>
-                <h2>From developers || For developers</h2>
+                <h2>Blue || Team</h2>
             </div>
             <div className="divWelcomeLogoAndRegistration">
                 <HashRouter>

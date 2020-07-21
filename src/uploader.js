@@ -43,7 +43,8 @@ export default class Uploader extends React.Component {
                 <form>
                     <input type="file" name="file" accept="image/*"  onChange={this.onFileChange} ></input>
                 </form>
-                <button onClick={()=> this.uploadProfilePic()}>Submit</button>
+                
+                <button className="glow-on-hover" onClick={()=> this.uploadProfilePic()}>Submit</button>
             </div>
         );
     }

@@ -17,8 +17,8 @@ export default class Chat extends React.Component {
         this.chatWindowRef = React.createRef();
         // Getting initial chat state from server
         axios.get("/getRecentChatMessages").then (result => {
-            console.log(result.data.recentMessages);
-            for (let index=0; index < result.data.recentMessages.length; index++) {
+            // Insert recent messages into chat, newest last (so in opposite order from db)
+            for (let index=result.data.recentMessages.length-1; index >= 0; index--) {
                 this.addMessageToDisplay (result.data.recentMessages[index]);
             }
         });
@@ -35,7 +35,7 @@ export default class Chat extends React.Component {
 
     addMessageToDisplay(serverSideMessage){
         const chatWindowMaxLength = 10;
-        // Adding new message to display
+        // Adding new message to display 
         let newDisplay = this.state.currentChatDisplay;
         newDisplay.push ({firstName: serverSideMessage.firstName,
             lastName: serverSideMessage.lastName,

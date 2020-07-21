@@ -55,12 +55,12 @@ export default class Profile extends React.Component {
                     {this.state.firstName} {this.state.lastName}
                 </h1>
                    
-                <Profilepic className="usersProfilePic"
+                <Profilepic
                     toggleModal={this.state.toggleModal}
                     setImage={this.state.setImage}
                     profilePic={this.state.profilePic}
+                    isLoggedOnUser={true}
                 />
-                 
                     
                 <Bioeditor bio={this.state.bio} draftBio={this.state.draftBio} />
             </div>

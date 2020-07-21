@@ -40,10 +40,10 @@ export default class Bioeditor extends React.Component {
         // has not retrieved the data from the database yet. It will be passed to
         // componentWillReceiveProps in a later render, at which point we copy
         // it to our state on the first receive of valid data.
-        console.log("Receiving new props");
-        if (this.state.bio == undefined || this.state.bio == null){
+        console.log("Receiving new props: bio is", newProperties.bio);
+        if (this.state.bio == undefined || this.state.bio == null || this.state.bio.length < 1){
             if (newProperties.bio != undefined && newProperties.bio != null){
-                // console.log(" -- setting new props, too");
+                console.log(" -- setting new props, too");
                 this.setState({bio: newProperties.bio});
             }
         }
@@ -106,6 +106,7 @@ export default class Bioeditor extends React.Component {
         // console.log("This is my draftBio:", draftBio);
         // console.log("Bio state is ", this.state.bio);
         const bio = this.state.bio;
+        console.log ("Rendering: bio is", bio);
         if (this.state.textAreaVisible) {
             return(
                 <div>
@@ -115,18 +116,18 @@ export default class Bioeditor extends React.Component {
                 </div>
             );
         } else {
-            if(bio != null){
+            if(bio != null && bio.length>0){
                 return(
                     <div>
                         <p className='anzColor'>{bio}</p>
-                        <button onClick={this.clickToEdit}>Edit bio</button>
+                        <button className="glow-on-hover" onClick={this.clickToEdit}>Edit bio</button>
                     </div>
                         
                 );
             }
             else {
                 return(
-                    <button onClick={this.clickToEdit}>Add bio</button>
+                    <button className="glow-on-hover"  onClick={this.clickToEdit}>Add bio</button>
                 );
             }
         }

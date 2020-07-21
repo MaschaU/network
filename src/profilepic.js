@@ -4,7 +4,7 @@ import React from "react";
 
 export default function Profilepic(props) {
     // console.log("Props in profile pic received from App:", props);
-    if (!props.firstName){
+    if (!props.isLoggedOnUser){
         return(
             <div>
                 <img className="imageOverflowed"></img>
@@ -13,11 +13,14 @@ export default function Profilepic(props) {
         );
     } else {
         return(
-            <div className="zoom">
-                <img className="imageOverflowed"></img>
-                <img className="usersProfilePic" src={props.profilePic}/>
-                <button onClick={props.toggleModal}>Edit your profile picture</button>
+            <div>
+                <div className="zoom">
+                    <img className="imageOverflowed" ></img>
+                    <img className="usersProfilePic" src={props.profilePic} />
+                </div>
+                
             </div>
+           
         );
     }
 }
