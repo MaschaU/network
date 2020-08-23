@@ -7,7 +7,7 @@ The Network is a single-page app where users can sign up, say a little bit about
 <img src="https://media.giphy.com/media/geJz9x47sDbo4FvmmJ/giphy.gif"/>
 
 <strong>Tech Stack</strong>
-<p>HTML, CSS, Node.js with Express, NPM, PostgreSQL, React, React Hooks, Redux, Bundle.js, Socket.io, AWS (ses&S3), Multer, Webpack, Babel</p>
+<p>HTML, CSS, Node.js with Express, npm, PostgreSQL, React, React Hooks, Redux, Bundle.js, Socket.io, AWS (ses&S3), Multer, Webpack, Babel</p>
 
 <strong>Features</strong>
 <ul>
